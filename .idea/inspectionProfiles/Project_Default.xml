@@ -1,0 +1,106 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="DuplicatedCode" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <Languages>
+        <language minSize="770" name="Python" />
+      </Languages>
+    </inspection_tool>
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="ignoredPackages">
+        <list>
+          <option value="alembic" />
+          <option value="anyio" />
+          <option value="asgiref" />
+          <option value="click" />
+          <option value="fastapi" />
+          <option value="greenlet" />
+          <option value="h11" />
+          <option value="idna" />
+          <option value="loguru" />
+          <option value="pydantic" />
+          <option value="sniffio" />
+          <option value="SQLAlchemy" />
+          <option value="starlette" />
+          <option value="typing_extensions" />
+          <option value="uvicorn" />
+          <option value="PyMySQL" />
+          <option value="requests" />
+          <option value="pycrypto" />
+          <option value="python-multipart" />
+          <option value="jose" />
+          <option value="passlib" />
+          <option value="smart-open" />
+          <option value="Jinja2" />
+          <option value="gevent" />
+          <option value="zope.event" />
+          <option value="zope.interface" />
+          <option value="python-json-logger" />
+          <option value="flake8" />
+          <option value="pytest" />
+          <option value="pytz" />
+          <option value="psycopg2-binary" />
+          <option value="redis" />
+          <option value="xmltodict" />
+          <option value="pycryptodome" />
+          <option value="boto3" />
+          <option value="cos-python-sdk-v5" />
+          <option value="gunicorn" />
+          <option value="aiohttp" />
+          <option value="cryptography" />
+          <option value="Babel" />
+          <option value="blinker" />
+          <option value="certifi" />
+          <option value="cffi" />
+          <option value="chardet" />
+          <option value="cookies" />
+          <option value="Flask" />
+          <option value="Flask-API" />
+          <option value="Flask-BabelEx" />
+          <option value="Flask-Login" />
+          <option value="Flask-Mail" />
+          <option value="Flask-Migrate" />
+          <option value="Flask-Principal" />
+          <option value="Flask-Security" />
+          <option value="Flask-SQLAlchemy" />
+          <option value="Flask-Script" />
+          <option value="Flask-WTF" />
+          <option value="importlib-metadata" />
+          <option value="itsdangerous" />
+          <option value="Mako" />
+          <option value="MarkupSafe" />
+          <option value="pycparser" />
+          <option value="python-dateutil" />
+          <option value="python-editor" />
+          <option value="responses" />
+          <option value="sentry-sdk" />
+          <option value="six" />
+          <option value="speaklater" />
+          <option value="typing-extensions" />
+          <option value="urllib3" />
+          <option value="Werkzeug" />
+          <option value="WTForms" />
+          <option value="zipp" />
+          <option value="flask_cors" />
+          <option value="hashids" />
+          <option value="google" />
+          <option value="protobuf" />
+          <option value="sqlalchemy" />
+          <option value="flask_sqlalchemy" />
+          <option value="flask-security" />
+          <option value="pyyaml" />
+          <option value="werkzeug" />
+          <option value="email-validator" />
+          <option value="botocore" />
+          <option value="uwsgi" />
+          <option value="PyJWT" />
+          <option value="jinja2" />
+          <option value="tencentcloud-sdk-python" />
+          <option value="jsonschema" />
+          <option value="xpinyin" />
+          <option value="openpyxl" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
