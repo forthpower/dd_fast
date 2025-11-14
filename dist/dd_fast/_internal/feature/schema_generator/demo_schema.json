@@ -1,0 +1,501 @@
+{
+  "models": [
+    {
+      "name": "user",
+      "label": "用户管理",
+      "primary_key": "user_id",
+      "entry": "list",
+      "parent": {
+        "label": "系统管理",
+        "name": "system"
+      },
+      "action": [
+        {"name": "list", "template": "tablebase"},
+        {"name": "create", "template": "formbase"},
+        {"name": "edit", "template": "editbase"},
+        {"name": "delete", "template": "button"},
+        {"name": "export", "template": "exportbase"}
+      ],
+      "fields": [
+        {
+          "name": "user_id",
+          "type": "Integer",
+          "label": "用户ID",
+          "width": 80,
+          "render_kw": {
+            "readonly": true
+          }
+        },
+        {
+          "name": "username",
+          "type": "String",
+          "label": "用户名",
+          "placeholder": "请输入用户名",
+          "validators": [
+            {"name": "data_required"},
+            {
+              "name": "length",
+              "kws": {
+                "min": 3,
+                "max": 20,
+                "message": "用户名长度必须在3-20个字符之间"
+              }
+            }
+          ]
+        },
+        {
+          "name": "email",
+          "type": "String",
+          "label": "邮箱",
+          "placeholder": "请输入邮箱地址",
+          "validators": [
+            {"name": "data_required"},
+            {
+              "name": "regex",
+              "kws": {
+                "regex": "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$",
+                "message": "请输入有效的邮箱地址"
+              }
+            }
+          ]
+        },
+        {
+          "name": "role",
+          "type": "Select",
+          "label": "角色",
+          "choices": [
+            ["admin", "管理员"],
+            ["operator", "运营"],
+            ["user", "普通用户"]
+          ],
+          "coerce": "string",
+          "default": "user"
+        },
+        {
+          "name": "status",
+          "type": "Select",
+          "label": "状态",
+          "choices": [
+            [1, "启用"],
+            [0, "禁用"]
+          ],
+          "coerce": "int",
+          "default": 1
+        },
+        {
+          "name": "avatar",
+          "type": "Image",
+          "label": "头像",
+          "style": "url",
+          "config": "s3_config",
+          "validators": [
+            {
+              "name": "size_limit",
+              "kws": {"max": 500}
+            },
+            {
+              "name": "type_limit",
+              "kws": {"type": [".jpg", ".jpeg", ".png", ".gif"]}
+            }
+          ]
+        },
+        {
+          "name": "phone",
+          "type": "String",
+          "label": "手机号",
+          "placeholder": "请输入手机号",
+          "validators": [
+            {
+              "name": "regex",
+              "kws": {
+                "regex": "^1[3-9]\\d{9}$",
+                "message": "请输入有效的手机号"
+              }
+            }
+          ]
+        },
+        {
+          "name": "bio",
+          "type": "TextArea",
+          "label": "个人简介",
+          "placeholder": "请输入个人简介",
+          "tooltip": {
+            "length": 50,
+            "width": 400,
+            "trigger": "hover"
+          }
+        },
+        {
+          "name": "last_login",
+          "type": "DateTime",
+          "label": "最后登录时间",
+          "render_kw": {
+            "readonly": true
+          }
+        },
+        {
+          "name": "create_time",
+          "type": "DateTime",
+          "label": "创建时间",
+          "render_kw": {
+            "readonly": true
+          }
+        }
+      ],
+      "base_props": {
+        "column_list": ["user_id", "username", "email", "role", "status", "last_login"],
+        "form_columns": ["username", "email", "role", "status", "phone", "avatar", "bio"],
+        "column_filters": {
+          "username": ["$like"],
+          "email": ["$like"],
+          "role": ["$eq"],
+          "status": ["$eq"]
+        },
+        "column_sortable_list": ["user_id", "create_time", "last_login"],
+        "page_size": 20,
+        "export_list": ["user_id", "username", "email", "role", "status", "phone", "create_time"],
+        "custom_style": {
+          "detail_style": "dropdown",
+          "submit_alert": true,
+          "table_height": 600
+        }
+      },
+      "custom_actions": [
+        {
+          "action_name": "reset_password",
+          "label": "重置密码",
+          "action": "ajax",
+          "params": ["user_id"],
+          "location": "list"
+        },
+        {
+          "action_name": "view_profile",
+          "label": "查看详情",
+          "action": "jump",
+          "params": ["user_id"],
+          "jump": {
+            "type": "inner",
+            "href": "user_profile"
+          },
+          "location": "outer_list",
+          "icon": "el-icon-user"
+        }
+      ]
+    },
+    {
+      "name": "product",
+      "label": "商品管理",
+      "primary_key": "product_id",
+      "entry": "list",
+      "parent": {
+        "label": "商品中心",
+        "name": "product_center"
+      },
+      "action": [
+        {"name": "list", "template": "batch_table"},
+        {"name": "create", "template": "formbase"},
+        {"name": "edit", "template": "editbase"},
+        {"name": "delete", "template": "button"},
+        {"name": "export", "template": "exportbase"}
+      ],
+      "fields": [
+        {
+          "name": "product_id",
+          "type": "Integer",
+          "label": "商品ID",
+          "width": 80,
+          "render_kw": {
+            "readonly": true
+          }
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "label": "商品名称",
+          "validators": [
+            {"name": "data_required"},
+            {
+              "name": "length",
+              "kws": {"min": 1, "max": 100}
+            }
+          ]
+        },
+        {
+          "name": "category",
+          "type": "Select",
+          "label": "商品分类",
+          "choices": "https://api.example.com/categories",
+          "field_chains": [
+            {
+              "child": "sub_category",
+              "params": ["category"]
+            }
+          ],
+          "validators": [
+            {"name": "data_required"}
+          ]
+        },
+        {
+          "name": "sub_category",
+          "type": "Select",
+          "label": "子分类",
+          "choices": "https://api.example.com/sub_categories",
+          "source": "https://api.example.com/sub_categories"
+        },
+        {
+          "name": "price",
+          "type": "Float",
+          "label": "价格",
+          "default": "0.00",
+          "validators": [
+            {"name": "data_required"}
+          ]
+        },
+        {
+          "name": "original_price",
+          "type": "Float",
+          "label": "原价",
+          "show_rule": {
+            "name": "on_sale",
+            "value": true,
+            "hideis": false
+          }
+        },
+        {
+          "name": "on_sale",
+          "type": "Boolean",
+          "label": "促销中",
+          "default": false
+        },
+        {
+          "name": "stock",
+          "type": "Integer",
+          "label": "库存",
+          "default": 0,
+          "validators": [
+            {"name": "data_required"}
+          ]
+        },
+        {
+          "name": "images",
+          "type": "ImageMulti",
+          "label": "商品图片",
+          "style": "url",
+          "config": "s3_config",
+          "validators": [
+            {"name": "count_limit", "kws": {"max": 5}}
+          ]
+        },
+        {
+          "name": "description",
+          "type": "Editor",
+          "label": "商品描述"
+        },
+        {
+          "name": "tags",
+          "type": "SelectMulti",
+          "label": "标签",
+          "choices": [
+            ["hot", "热门"],
+            ["new", "新品"],
+            ["recommend", "推荐"],
+            ["limited", "限量"]
+          ],
+          "coerce": "string"
+        },
+        {
+          "name": "status",
+          "type": "Select",
+          "label": "状态",
+          "choices": [
+            ["draft", "草稿"],
+            ["published", "已发布"],
+            ["offline", "已下架"]
+          ],
+          "default": "draft"
+        },
+        {
+          "name": "detail_url",
+          "type": "LinkString",
+          "label": "详情链接",
+          "params": ["product_id"],
+          "model": "external-links",
+          "copy_rule": {
+            "status": "published"
+          }
+        },
+        {
+          "name": "create_time",
+          "type": "DateTime",
+          "label": "创建时间",
+          "render_kw": {
+            "readonly": true
+          }
+        }
+      ],
+      "base_props": {
+        "column_list": ["product_id", "name", "category", "price", "stock", "status", "create_time"],
+        "form_columns": ["name", "category", "sub_category", "price", "original_price", "on_sale", "stock", "images", "description", "tags", "status"],
+        "column_editable_list": ["price", "stock"],
+        "column_filters": {
+          "name": ["$like"],
+          "category": ["$eq"],
+          "status": ["$eq"],
+          "tags": ["$in"]
+        },
+        "column_sortable_list": ["product_id", "price", "stock", "create_time"],
+        "page_size": 20,
+        "custom_style": {
+          "detail_style": "dropdown",
+          "field_style": "top",
+          "submit_alert": true,
+          "form_label_width": 100
+        }
+      },
+      "custom_actions": [
+        {
+          "action_name": "publish",
+          "label": "发布",
+          "action": "alert",
+          "params": ["product_id", "name"],
+          "alert": {
+            "content": "确定发布该商品吗？",
+            "content_field": ["product_id", "name"]
+          },
+          "location": "list"
+        },
+        {
+          "action_name": "batch_delete",
+          "label": "批量删除",
+          "action": "ajax",
+          "params": ["product_id"],
+          "location": "batch_list"
+        },
+        {
+          "action_name": "preview",
+          "label": "预览",
+          "action": "jump",
+          "params": ["product_id"],
+          "jump": {
+            "type": "outer",
+            "href": "https://shop.example.com/product/detail"
+          },
+          "location": "outer_list",
+          "icon": "el-icon-view"
+        }
+      ]
+    },
+    {
+      "name": "config",
+      "label": "系统配置",
+      "primary_key": "config_id",
+      "entry": "ajax",
+      "parent": "",
+      "action": [
+        {"name": "ajax", "template": "filterform"}
+      ],
+      "fields": [
+        {
+          "name": "config_id",
+          "type": "Integer",
+          "label": "配置ID",
+          "render_kw": {
+            "readonly": true
+          }
+        },
+        {
+          "name": "config_key",
+          "type": "Select",
+          "label": "配置项",
+          "choices": "https://api.example.com/config_keys",
+          "field_chains": [
+            {
+              "child": "config_value",
+              "params": ["config_key"]
+            }
+          ]
+        },
+        {
+          "name": "config_value",
+          "type": "JsonEditor",
+          "label": "配置值",
+          "source": "https://api.example.com/config_value",
+          "remote_explain": "https://api.example.com/config_explains",
+          "expand_all": true,
+          "show_diff": true
+        }
+      ],
+      "base_props": {
+        "filter_form_columns": ["config_key"],
+        "ajax_form_columns": ["config_key", "config_value"],
+        "custom_style": {
+          "form_submit_style": "alert",
+          "field_style": "top"
+        }
+      }
+    }
+  ],
+  "link_forms": [
+    {
+      "name": "lf_attributes",
+      "fields": [
+        {
+          "name": "attr_name",
+          "type": "String",
+          "label": "属性名",
+          "validators": [{"name": "data_required"}]
+        },
+        {
+          "name": "attr_value",
+          "type": "String",
+          "label": "属性值",
+          "validators": [{"name": "data_required"}]
+        }
+      ]
+    }
+  ],
+  "inline_models": [
+    {
+      "name": "im_details",
+      "fields": [
+        {
+          "name": "detail_field1",
+          "type": "String",
+          "label": "详情字段1"
+        },
+        {
+          "name": "detail_field2",
+          "type": "String",
+          "label": "详情字段2"
+        }
+      ]
+    }
+  ],
+  "configs": [
+    {
+      "name": "s3_config",
+      "upload_type": "s3",
+      "config": {
+        "aws_access_key_id": "YOUR_ACCESS_KEY",
+        "aws_secret_access_key": "YOUR_SECRET_KEY",
+        "bucket": "your-bucket-name",
+        "domain": "https://your-bucket.s3.region.amazonaws.com",
+        "region": "us-east-1"
+      }
+    },
+    {
+      "name": "local_config",
+      "upload_type": "local",
+      "config": {
+        "domain": "https://your-domain.com",
+        "upload": {},
+        "auth": {
+          "auth_url": "https://your-domain.com/auth",
+          "content_type": "application/json",
+          "auth_data": {}
+        }
+      }
+    }
+  ]
+}
+

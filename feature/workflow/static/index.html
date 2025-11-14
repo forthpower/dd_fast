@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflow可视化工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 10px;
+            padding: 15px 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .upload-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .upload-area {
+            border: 2px dashed #3498db;
+            border-radius: 8px;
+            padding: 30px 20px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #2980b9;
+            background: #ecf0f1;
+        }
+
+        .upload-area.dragover {
+            border-color: #27ae60;
+            background: #d4edda;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            color: #2c3e50;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .upload-hint {
+            color: #7f8c8d;
+            font-size: 12px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .workflow-container {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .workflow-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .workflow-header h2 {
+            color: #2c3e50;
+            font-size: 20px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 10px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 90px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .nodes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .node-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px;
+            border-left: 3px solid #3498db;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .node-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .node-card.trigger {
+            border-left-color: #9b59b6;
+        }
+
+        .node-card.condition {
+            border-left-color: #e67e22;
+        }
+
+        .node-card.component {
+            border-left-color: #3498db;
+        }
+
+        .node-card.action {
+            border-left-color: #27ae60;
+        }
+
+        .node-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .node-id {
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .node-type {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .node-description {
+            font-size: 13px;
+            color: #2c3e50;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .modal-header h3 {
+            color: #2c3e50;
+            font-size: 24px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 32px;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+
+        .close-btn:hover {
+            color: #e74c3c;
+        }
+
+        .detail-section {
+            margin-bottom: 20px;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: #7f8c8d;
+            font-family: 'Consolas', monospace;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        /* Split样式 */
+        .splits-container {
+            display: none;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-top: 15px;
+        }
+
+        .splits-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .splits-header h2 {
+            color: #2c3e50;
+            font-size: 20px;
+        }
+
+        .splits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 12px;
+        }
+
+        .split-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px;
+            border-left: 3px solid #9b59b6;
+        }
+
+        .split-condition {
+            background: #3498db;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .split-condition.none {
+            background: #95a5a6;
+        }
+
+        .split-routes {
+            margin-top: 10px;
+        }
+
+        .route-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
+        }
+
+        .route-name {
+            font-weight: bold;
+            color: #2c3e50;
+            min-width: 100px;
+            font-size: 13px;
+        }
+
+        .route-bar {
+            flex: 1;
+            height: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            margin: 0 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .route-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .route-percentage {
+            font-size: 14px;
+            font-weight: bold;
+            color: #2c3e50;
+            min-width: 50px;
+            text-align: right;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .tab {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 对比功能样式 */
+        .compare-section {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .compare-header {
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .compare-header h3 {
+            color: #2c3e50;
+            font-size: 18px;
+            margin-bottom: 3px;
+        }
+
+        .compare-header p {
+            color: #7f8c8d;
+            font-size: 12px;
+        }
+
+        .adjustment-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 10px;
+            border: 2px solid #ecf0f1;
+            border-radius: 6px;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            margin-bottom: 12px;
+            resize: vertical;
+        }
+
+        .adjustment-textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .compare-result {
+            margin-top: 15px;
+            display: none;
+        }
+
+        .compare-summary {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .compare-summary h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .change-item {
+            background: white;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 3px solid #3498db;
+        }
+
+        .change-item.add {
+            border-left-color: #27ae60;
+        }
+
+        .change-item.remove {
+            border-left-color: #e74c3c;
+        }
+
+        .change-item.modify {
+            border-left-color: #f39c12;
+        }
+
+        .change-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .change-title {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 15px;
+        }
+
+        .change-action {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .change-action.add {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .change-action.remove {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .change-action.modify {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .change-content {
+            margin-top: 8px;
+        }
+
+        .change-row {
+            display: flex;
+            margin-bottom: 6px;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .change-label {
+            min-width: 80px;
+            color: #7f8c8d;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .change-value {
+            flex: 1;
+            color: #2c3e50;
+            font-size: 13px;
+        }
+
+        .change-percentage {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #e7f3ff;
+            border-radius: 4px;
+            margin: 0 3px;
+            font-weight: bold;
+        }
+
+        .change-instructions {
+            margin-top: 8px;
+            padding: 8px;
+            background: #e7f3ff;
+            border-radius: 4px;
+            color: #004085;
+            font-size: 13px;
+        }
+
+        .change-instructions ul {
+            margin: 3px 0;
+            padding-left: 18px;
+        }
+
+        /* 完整分量对比样式 */
+        .full-comparison {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .comparison-table th {
+            background: #3498db;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .comparison-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 13px;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .comparison-payment-header {
+            background: #2c3e50 !important;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .comparison-currency {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .comparison-percentages {
+            display: flex;
+            gap: 8px;
+        }
+
+        .comparison-percentage-item {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .comparison-percentage-item.adyen {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .comparison-percentage-item.stripe {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .comparison-percentage-item.awx {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        /* 分量对比功能区域样式 */
+        .split-comparison-section {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-top: 0;
+        }
+
+        .section-header {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .section-header h2 {
+            color: #2c3e50;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .section-header p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        /* 功能选择标签样式 */
+        .feature-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .feature-tab {
+            flex: 1;
+            padding: 12px 20px;
+            background: #ecf0f1;
+            color: #2c3e50;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-tab:hover {
+            background: #d5dbdb;
+        }
+
+        .feature-tab.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .feature-content {
+            display: none;
+        }
+
+        .feature-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔀 Workflow工具集</h1>
+            <p>Workflow可视化 & 分量对比分析</p>
+        </div>
+
+        <!-- 功能选择标签 -->
+        <div class="feature-tabs">
+            <div class="feature-tab active" onclick="switchFeature('visualize')">📊 Workflow可视化</div>
+            <div class="feature-tab" onclick="switchFeature('compare')">⚖️ 分量对比分析</div>
+        </div>
+
+        <!-- Workflow可视化功能 -->
+        <div class="feature-content active" id="visualizeFeature">
+            <div class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">点击或拖拽JSON文件到这里</div>
+                    <div class="upload-hint">支持 .json 格式文件</div>
+                    <input type="file" id="fileInput" accept=".json">
+                </div>
+            </div>
+
+        <div class="workflow-container" id="workflowContainer">
+            <div class="workflow-header">
+                <h2>📊 工作流可视化</h2>
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="nodeCount">0</div>
+                        <div class="stat-label">节点数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="connectionCount">0</div>
+                        <div class="stat-label">连接数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="splitCount">0</div>
+                        <div class="stat-label">Split数</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 选项卡 -->
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('nodes')">📋 所有节点</div>
+                <div class="tab" onclick="switchTab('splits')">🔀 Split分布</div>
+                <div class="tab" onclick="switchTab('compare')">⚖️ 分量对比（JSON）</div>
+            </div>
+
+            <!-- 节点列表 -->
+            <div class="tab-content active" id="nodesTab">
+                <div class="nodes-container" id="nodesContainer"></div>
+            </div>
+
+            <!-- Split可视化 -->
+            <div class="tab-content" id="splitsTab">
+                <div class="splits-container" id="splitsContainer"></div>
+            </div>
+
+            <!-- 分量对比 -->
+            <div class="tab-content" id="compareTab">
+                <div class="compare-section">
+                    <div class="compare-header">
+                        <h3>📝 输入调整方案</h3>
+                        <p>粘贴您的分量调整方案文本</p>
+                    </div>
+                    <textarea id="adjustmentText" class="adjustment-textarea" placeholder="例如：
+CARD
+USD - 20%：40%：40%
+KRW/EUR/AED - 40%：20%：40%
+JPY - 20%：20%：60%"></textarea>
+                    <div style="margin-bottom: 12px;">
+                        <label style="font-weight: bold; color: #2c3e50; margin-right: 10px;">调整模式：</label>
+                        <label style="margin-right: 15px; cursor: pointer;">
+                            <input type="radio" name="adjustmentMode" value="update" checked style="margin-right: 5px;">
+                            <span>更新调整（只调整指定币种，其他保持原样）</span>
+                        </label>
+                        <label style="cursor: pointer;">
+                            <input type="radio" name="adjustmentMode" value="override" style="margin-right: 5px;">
+                            <span>覆盖调整（全部按照新方案设置）</span>
+                        </label>
+                    </div>
+                    <button class="btn btn-success" onclick="compareSplits()">开始对比</button>
+                    <div id="compareResult" class="compare-result"></div>
+                    <div id="fullComparison" class="full-comparison"></div>
+                </div>
+            </div>
+
+            <div class="loading" id="loadingState" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p>正在解析文件...</p>
+            </div>
+
+            <div class="empty-state" id="emptyState">
+                <div class="empty-state-icon">📋</div>
+                <p>请上传JSON文件以开始可视化</p>
+            </div>
+            </div>
+        </div>
+
+        <!-- 分量对比分析功能 -->
+        <div class="feature-content" id="compareFeature">
+            <div class="split-comparison-section">
+                <div class="section-header">
+                    <h2>⚖️ 分量对比分析</h2>
+                    <p>输入调整方案，系统将自动读取Primer Workflow文档进行分量对比</p>
+                </div>
+
+                <div class="compare-section">
+                    <div class="compare-header">
+                        <h3>📝 输入调整方案</h3>
+                        <p>粘贴您的分量调整方案文本</p>
+                    </div>
+                    <textarea id="docAdjustmentText" class="adjustment-textarea" placeholder="例如：
+CARD
+USD - 20%：40%：40%
+KRW/EUR/AED - 40%：20%：40%
+JPY - 20%：20%：60%"></textarea>
+                    <div style="margin-bottom: 12px;">
+                        <label style="font-weight: bold; color: #2c3e50; margin-right: 10px;">调整模式：</label>
+                        <label style="margin-right: 15px; cursor: pointer;">
+                            <input type="radio" name="docAdjustmentMode" value="update" checked style="margin-right: 5px;">
+                            <span>更新调整（只调整指定币种，其他保持原样）</span>
+                        </label>
+                        <label style="cursor: pointer;">
+                            <input type="radio" name="docAdjustmentMode" value="override" style="margin-right: 5px;">
+                            <span>覆盖调整（全部按照新方案设置）</span>
+                        </label>
+                    </div>
+                    <button class="btn btn-success" onclick="compareDocSplits()">开始对比</button>
+                    <div id="docCompareResult" class="compare-result"></div>
+                    <div id="docFullComparison" class="full-comparison"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for node details -->
+    <div class="modal" id="nodeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>节点详情</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        let workflowData = null;
+        let uploadedFile = null;  // 保存上传的文件
+
+        // 功能切换
+        function switchFeature(feature) {
+            console.log('切换功能:', feature); // 调试用
+            
+            // 切换标签样式
+            document.querySelectorAll('.feature-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.feature-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            if (feature === 'visualize') {
+                const tab = document.querySelectorAll('.feature-tab')[0];
+                const content = document.getElementById('visualizeFeature');
+                if (tab) tab.classList.add('active');
+                if (content) {
+                    content.classList.add('active');
+                    console.log('显示可视化功能');
+                }
+            } else if (feature === 'compare') {
+                const tab = document.querySelectorAll('.feature-tab')[1];
+                const content = document.getElementById('compareFeature');
+                if (tab) tab.classList.add('active');
+                if (content) {
+                    content.classList.add('active');
+                    console.log('显示对比功能', content);
+                } else {
+                    console.error('找不到 compareFeature 元素');
+                }
+            }
+        }
+
+        // 文件上传处理
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        async function handleFile(file) {
+            if (!file.name.endsWith('.json')) {
+                alert('请上传JSON格式文件');
+                return;
+            }
+
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('workflowContainer').style.display = 'none';
+
+            try {
+                // 上传到后端解析
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const response = await fetch('/api/parse', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    workflowData = result.data;
+                    uploadedFile = file;  // 保存文件引用
+                    renderWorkflow(result.data.nodes, result.data.connections, result.summary);
+                    renderSplits(result.data.splits || []);
+                    document.getElementById('loadingState').style.display = 'none';
+                    document.getElementById('workflowContainer').style.display = 'block';
+                } else {
+                    throw new Error(result.error || '解析失败');
+                }
+            } catch (error) {
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'block';
+                
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = '解析失败: ' + error.message;
+                document.querySelector('.container').appendChild(errorDiv);
+            }
+        }
+
+        function renderWorkflow(nodes, connections, summary) {
+            document.getElementById('nodeCount').textContent = summary.total_nodes;
+            document.getElementById('connectionCount').textContent = summary.total_connections;
+            document.getElementById('splitCount').textContent = summary.total_splits || 0;
+
+            const container = document.getElementById('nodesContainer');
+            container.innerHTML = '';
+
+            nodes.forEach(node => {
+                const card = document.createElement('div');
+                
+                // 根据类型设置样式
+                let cardClass = 'node-card ';
+                if (node.type === 'TRIGGER') {
+                    cardClass += 'trigger';
+                } else if (node.type.includes('ACTION')) {
+                    cardClass += 'action';
+                } else {
+                    cardClass += 'component';
+                }
+                
+                card.className = cardClass;
+                
+                card.innerHTML = `
+                    <div class="node-title">${escapeHtml(node.name)}</div>
+                    <div class="node-id">ID: ${escapeHtml(node.id.substring(0, 30))}...</div>
+                    <div class="node-type">类型: ${escapeHtml(node.type)}</div>
+                    ${node.description ? `<div class="node-description">${escapeHtml(node.description.substring(0, 100))}${node.description.length > 100 ? '...' : ''}</div>` : ''}
+                `;
+                card.addEventListener('click', () => showNodeDetails(node));
+                container.appendChild(card);
+            });
+        }
+
+        function renderSplits(splits) {
+            const container = document.getElementById('splitsContainer');
+            container.innerHTML = '';
+            container.style.display = 'block';
+
+            if (splits.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔀</div><p>未找到Split节点</p></div>';
+                return;
+            }
+
+            splits.forEach((split, index) => {
+                const card = document.createElement('div');
+                card.className = 'split-card';
+                
+                // 条件标签
+                const conditionName = split.condition ? split.condition.name : '无条件';
+                const hasCondition = split.condition && split.condition.name !== '无';
+                
+                card.innerHTML = `
+                    <div class="split-condition ${hasCondition ? '' : 'none'}">
+                        ${escapeHtml(conditionName)}
+                    </div>
+                    <div class="split-routes">
+                        ${split.routes.map(route => `
+                            <div class="route-item">
+                                <div class="route-name">${escapeHtml(route.name)}</div>
+                                <div class="route-bar">
+                                    <div class="route-fill" style="width: ${route.percentage}%;">
+                                        ${route.percentage >= 10 ? route.percentage + '%' : ''}
+                                    </div>
+                                </div>
+                                <div class="route-percentage">${route.percentage}%</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        function switchTab(tabName) {
+            // 切换选项卡样式
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            if (tabName === 'nodes') {
+                document.querySelectorAll('.tab')[0].classList.add('active');
+                document.getElementById('nodesTab').classList.add('active');
+            } else if (tabName === 'splits') {
+                document.querySelectorAll('.tab')[1].classList.add('active');
+                document.getElementById('splitsTab').classList.add('active');
+            } else if (tabName === 'compare') {
+                document.querySelectorAll('.tab')[2].classList.add('active');
+                document.getElementById('compareTab').classList.add('active');
+            }
+        }
+
+        async function compareSplits() {
+            const adjustmentText = document.getElementById('adjustmentText').value.trim();
+            if (!adjustmentText) {
+                alert('请输入调整方案文本');
+                return;
+            }
+
+            // 获取调整模式
+            const adjustmentMode = document.querySelector('input[name="adjustmentMode"]:checked').value;
+
+            // 使用已上传的文件或重新获取
+            const fileInput = document.getElementById('fileInput');
+            let fileToUse = uploadedFile;
+            
+            if (!fileToUse && fileInput.files && fileInput.files.length > 0) {
+                fileToUse = fileInput.files[0];
+            }
+            
+            if (!fileToUse) {
+                alert('请先上传workflow JSON文件');
+                return;
+            }
+
+            const resultDiv = document.getElementById('compareResult');
+            const fullComparisonDiv = document.getElementById('fullComparison');
+            resultDiv.style.display = 'block';
+            fullComparisonDiv.style.display = 'none';
+            resultDiv.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>正在对比配置...</p></div>';
+
+            try {
+                const formData = new FormData();
+                formData.append('file', fileToUse);
+                formData.append('adjustment_text', adjustmentText);
+                formData.append('adjustment_mode', adjustmentMode);
+
+                const response = await fetch('/api/compare-split', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    renderCompareResult(result.data);
+                    renderFullComparison(result.data);
+                } else {
+                    throw new Error(result.error || '对比失败');
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error-message">对比失败: ${error.message}</div>`;
+            }
+        }
+
+        function renderCompareResult(data, resultDivId = 'compareResult') {
+            const resultDiv = document.getElementById(resultDivId);
+            
+            let html = '';
+
+            // 按支付方式和操作类型分组
+            const changesByMethod = {};
+            if (data.changes && data.changes.length > 0) {
+                data.changes.forEach(change => {
+                    const method = change.payment_method || 'UNKNOWN';
+                    if (!changesByMethod[method]) {
+                        changesByMethod[method] = {
+                            add: [],
+                            remove: [],
+                            modify: []
+                        };
+                    }
+                    if (change.action && changesByMethod[method][change.action]) {
+                        changesByMethod[method][change.action].push(change);
+                    }
+                });
+            }
+
+            // 遍历每个支付方式
+            Object.keys(changesByMethod).forEach(paymentMethod => {
+                const changes = changesByMethod[paymentMethod];
+                // 将UNKNOWN显示为"其他币种"
+                const displayPaymentMethod = paymentMethod === "UNKNOWN" ? "其他币种" : paymentMethod;
+                
+                html += `<div class="change-item" style="margin-bottom: 15px;">`;
+                html += `<div class="change-title" style="font-size: 16px; margin-bottom: 10px; color: #2c3e50;">${displayPaymentMethod}</div>`;
+                
+                // 显示需要删除的币种（一行展示多个）
+                if (changes.remove && changes.remove.length > 0) {
+                    html += `<div style="margin-bottom: 12px; padding: 10px; background: #fee; border-radius: 4px; border-left: 3px solid #e74c3c;">`;
+                    html += `<div style="font-weight: bold; color: #721c24; margin-bottom: 6px; font-size: 13px;">➖ 需要删除的币种：</div>`;
+                    html += `<div style="display: flex; flex-wrap: wrap; gap: 6px;">`;
+                    changes.remove.forEach(change => {
+                        const displayCurrency = change.currency === "UNKNOWN" ? "其他币种" : change.currency;
+                        html += `<span style="padding: 4px 10px; background: #f8d7da; color: #721c24; border-radius: 4px; font-size: 13px; font-weight: 500;">${displayCurrency}</span>`;
+                    });
+                    html += `</div>`;
+                    html += `</div>`;
+                }
+
+                // 显示需要增加的币种（一行展示多个，带分量信息）
+                if (changes.add && changes.add.length > 0) {
+                    html += `<div style="margin-bottom: 12px; padding: 10px; background: #d4edda; border-radius: 4px; border-left: 3px solid #27ae60;">`;
+                    html += `<div style="font-weight: bold; color: #155724; margin-bottom: 6px; font-size: 13px;">➕ 需要增加的币种：</div>`;
+                    html += `<div style="display: flex; flex-wrap: wrap; gap: 8px;">`;
+                    changes.add.forEach(change => {
+                        const percentages = change.new.percentages || [];
+                        const displayCurrency = change.currency === "UNKNOWN" ? "其他币种" : change.currency;
+                        html += `<div style="padding: 6px 10px; background: white; border-radius: 4px; border: 1px solid #c3e6cb;">`;
+                        html += `<div style="font-weight: bold; color: #155724; font-size: 13px; margin-bottom: 3px;">${displayCurrency}</div>`;
+                        html += `<div style="font-size: 12px; color: #155724;">`;
+                        html += `<span style="margin-right: 4px;">Adyen ${percentages[0] || 0}%</span>`;
+                        html += `<span style="margin-right: 4px;">Stripe ${percentages[1] || 0}%</span>`;
+                        html += `<span>AWX ${percentages[2] || 0}%</span>`;
+                        html += `</div>`;
+                        html += `</div>`;
+                    });
+                    html += `</div>`;
+                    html += `</div>`;
+                }
+
+                // 显示需要修改的币种（单独展示，显示原来的和现在的分量）
+                if (changes.modify && changes.modify.length > 0) {
+                    html += `<div style="margin-bottom: 12px;">`;
+                    html += `<div style="font-weight: bold; color: #856404; margin-bottom: 8px; font-size: 13px;">✏️ 需要修改的币种：</div>`;
+                    changes.modify.forEach(change => {
+                        const oldPct = change.current.percentages || [];
+                        const newPct = change.new.percentages || [];
+                        const displayCurrency = change.currency === "UNKNOWN" ? "其他币种" : change.currency;
+                        html += `<div style="margin-bottom: 8px; padding: 8px; background: #fff3cd; border-radius: 4px; border-left: 3px solid #f39c12;">`;
+                        html += `<div style="font-weight: bold; color: #856404; margin-bottom: 6px; font-size: 13px;">${displayCurrency}</div>`;
+                        
+                        // 原来的分量
+                        html += `<div class="change-row">`;
+                        html += `<div class="change-label">原来:</div>`;
+                        html += `<div class="change-value">`;
+                        html += `<span class="change-percentage" style="background: #fff3cd;">Adyen ${oldPct[0] || 0}%</span>`;
+                        html += `<span class="change-percentage" style="background: #fff3cd;">Stripe ${oldPct[1] || 0}%</span>`;
+                        html += `<span class="change-percentage" style="background: #fff3cd;">AWX ${oldPct[2] || 0}%</span>`;
+                        html += `</div>`;
+                        html += `</div>`;
+                        
+                        // 现在的分量
+                        html += `<div class="change-row">`;
+                        html += `<div class="change-label">现在:</div>`;
+                        html += `<div class="change-value">`;
+                        html += `<span class="change-percentage" style="background: #d4edda;">Adyen ${newPct[0] || 0}%</span>`;
+                        html += `<span class="change-percentage" style="background: #d4edda;">Stripe ${newPct[1] || 0}%</span>`;
+                        html += `<span class="change-percentage" style="background: #d4edda;">AWX ${newPct[2] || 0}%</span>`;
+                        html += `</div>`;
+                        html += `</div>`;
+                        
+                        html += `</div>`;
+                    });
+                    html += `</div>`;
+                }
+                
+                html += `</div>`;
+            });
+
+            // 显示需要合并的币种
+            const summary = data.summary || {};
+            if (summary.currencies_to_merge && summary.currencies_to_merge.length > 0) {
+                html += `<div class="change-item modify" style="margin-top: 15px;">`;
+                html += `<div class="change-title" style="font-size: 16px; margin-bottom: 10px;">🔗 需要合并的币种</div>`;
+                
+                summary.currencies_to_merge.forEach(merge => {
+                    html += `<div style="margin-bottom: 8px; padding: 8px; background: #fff3cd; border-radius: 4px;">`;
+                    html += `<div style="font-weight: bold; margin-bottom: 5px;">${merge.payment_method} - ${merge.currencies.join('/')}</div>`;
+                    html += `<div style="font-size: 13px;">`;
+                    html += `<span class="change-percentage" style="background: #fff3cd;">Adyen ${merge.percentages[0]}%</span>`;
+                    html += `<span class="change-percentage" style="background: #fff3cd;">Stripe ${merge.percentages[1]}%</span>`;
+                    html += `<span class="change-percentage" style="background: #fff3cd;">AWX ${merge.percentages[2]}%</span>`;
+                    html += `</div>`;
+                    html += `<div style="font-size: 12px; color: #856404; margin-top: 5px;">需要将 ${merge.currencies.join('、')} 合并为同一个split配置</div>`;
+                    html += `</div>`;
+                });
+                
+                html += `</div>`;
+            }
+
+            resultDiv.innerHTML = html || '<div style="padding: 20px; text-align: center; color: #7f8c8d;">未发现需要调整的配置</div>';
+        }
+
+        function renderFullComparison(data, fullComparisonDivId = 'fullComparison') {
+            const fullComparisonDiv = document.getElementById(fullComparisonDivId);
+            
+            if (!data.full_comparison) {
+                fullComparisonDiv.style.display = 'none';
+                return;
+            }
+
+            const before = data.full_comparison.before || {};
+            const after = data.full_comparison.after || {};
+            
+            // 获取所有支付方式
+            const allPaymentMethods = new Set([
+                ...Object.keys(before),
+                ...Object.keys(after)
+            ]);
+
+            if (allPaymentMethods.size === 0) {
+                fullComparisonDiv.style.display = 'none';
+                return;
+            }
+
+            fullComparisonDiv.style.display = 'block';
+            
+            let html = '<div class="change-item" style="margin-top: 20px;">';
+            html += '<div class="change-title" style="font-size: 16px; margin-bottom: 10px; color: #2c3e50;">📊 完整分量对比</div>';
+            html += '<table class="comparison-table">';
+            html += '<thead>';
+            html += '<tr>';
+            html += '<th style="width: 150px;">支付方式</th>';
+            html += '<th style="width: 100px;">币种</th>';
+            html += '<th style="width: 200px;">之前的分量</th>';
+            html += '<th style="width: 200px;">现在的分量</th>';
+            html += '</tr>';
+            html += '</thead>';
+            html += '<tbody>';
+
+            // 按支付方式排序
+            const sortedPaymentMethods = Array.from(allPaymentMethods).sort();
+            
+            sortedPaymentMethods.forEach(paymentMethod => {
+                const beforeCurrencies = before[paymentMethod] || {};
+                const afterCurrencies = after[paymentMethod] || {};
+                const allCurrencies = new Set([
+                    ...Object.keys(beforeCurrencies),
+                    ...Object.keys(afterCurrencies)
+                ]);
+
+                if (allCurrencies.size === 0) return;
+
+                // 支付方式标题行
+                html += `<tr class="comparison-payment-header">`;
+                html += `<td colspan="4">${paymentMethod}</td>`;
+                html += `</tr>`;
+
+                // 按币种排序
+                const sortedCurrencies = Array.from(allCurrencies).sort();
+                
+                sortedCurrencies.forEach(currency => {
+                    const beforePct = beforeCurrencies[currency] || [];
+                    const afterPct = afterCurrencies[currency] || [];
+                    
+                    html += '<tr>';
+                    html += '<td></td>'; // 支付方式列留空
+                    html += `<td class="comparison-currency">${currency}</td>`;
+                    
+                    // 之前的分量
+                    html += '<td>';
+                    if (beforePct.length > 0) {
+                        html += '<div class="comparison-percentages">';
+                        html += `<span class="comparison-percentage-item adyen">Adyen ${beforePct[0] || 0}%</span>`;
+                        html += `<span class="comparison-percentage-item stripe">Stripe ${beforePct[1] || 0}%</span>`;
+                        html += `<span class="comparison-percentage-item awx">AWX ${beforePct[2] || 0}%</span>`;
+                        html += '</div>';
+                    } else {
+                        html += '<span style="color: #95a5a6;">-</span>';
+                    }
+                    html += '</td>';
+                    
+                    // 现在的分量
+                    html += '<td>';
+                    if (afterPct.length > 0) {
+                        html += '<div class="comparison-percentages">';
+                        html += `<span class="comparison-percentage-item adyen">Adyen ${afterPct[0] || 0}%</span>`;
+                        html += `<span class="comparison-percentage-item stripe">Stripe ${afterPct[1] || 0}%</span>`;
+                        html += `<span class="comparison-percentage-item awx">AWX ${afterPct[2] || 0}%</span>`;
+                        html += '</div>';
+                    } else {
+                        html += '<span style="color: #95a5a6;">-</span>';
+                    }
+                    html += '</td>';
+                    
+                    html += '</tr>';
+                });
+            });
+
+            html += '</tbody>';
+            html += '</table>';
+            html += '</div>';
+
+            fullComparisonDiv.innerHTML = html;
+        }
+
+        function showNodeDetails(node) {
+            const modal = document.getElementById('nodeModal');
+            const body = document.getElementById('modalBody');
+            
+            body.innerHTML = `
+                <div class="detail-section">
+                    <div class="detail-label">名称:</div>
+                    <div class="detail-value">${escapeHtml(node.name)}</div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-label">ID:</div>
+                    <div class="detail-value">${escapeHtml(node.id)}</div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-label">类型:</div>
+                    <div class="detail-value">${escapeHtml(node.type)}</div>
+                </div>
+                ${node.description ? `
+                <div class="detail-section">
+                    <div class="detail-label">描述:</div>
+                    <div class="detail-value">${escapeHtml(node.description)}</div>
+                </div>
+                ` : ''}
+                <div class="detail-section">
+                    <div class="detail-label">原始数据:</div>
+                    <div class="detail-value">${escapeHtml(JSON.stringify(node.data, null, 2))}</div>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('nodeModal').style.display = 'none';
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // 点击模态框外部关闭
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('nodeModal');
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        async function compareDocSplits() {
+            const adjustmentText = document.getElementById('docAdjustmentText').value.trim();
+            if (!adjustmentText) {
+                alert('请输入调整方案文本');
+                return;
+            }
+
+            // 获取调整模式
+            const adjustmentMode = document.querySelector('input[name="docAdjustmentMode"]:checked').value;
+
+            const resultDiv = document.getElementById('docCompareResult');
+            const fullComparisonDiv = document.getElementById('docFullComparison');
+            resultDiv.style.display = 'block';
+            fullComparisonDiv.style.display = 'none';
+            resultDiv.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>正在读取文档并对比配置...</p></div>';
+
+            try {
+                const formData = new FormData();
+                formData.append('adjustment_text', adjustmentText);
+                formData.append('adjustment_mode', adjustmentMode);
+
+                const response = await fetch('/api/compare-doc-split', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    renderDocCompareResult(result.data);
+                    renderDocFullComparison(result.data);
+                } else {
+                    throw new Error(result.error || '对比失败');
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error-message">对比失败: ${error.message}</div>`;
+            }
+        }
+
+        function renderDocCompareResult(data) {
+            // 复用renderCompareResult的逻辑
+            renderCompareResult(data, 'docCompareResult');
+        }
+
+        function renderDocFullComparison(data) {
+            // 复用renderFullComparison的逻辑
+            renderFullComparison(data, 'docFullComparison');
+        }
+    </script>
+</body>
+</html>
