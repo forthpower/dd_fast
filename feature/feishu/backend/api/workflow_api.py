@@ -11,6 +11,7 @@ import sys
 import json
 import csv
 import logging
+from datetime import datetime
 
 from feature.workflow import WorkflowParser
 from feature.workflow.docx_reader import DocxReader
@@ -28,9 +29,11 @@ sys.path.insert(0, str(current_dir))
 workflow_api = Blueprint('workflow_api', __name__)
 
 FEISHU_TABLE_URL = "https://centurygames.feishu.cn/base/ZjWjbTdQQaX22VsaMQzcGSLbnyc?table=tblKHfdMJyrVonxS&view=vew9fRbXDD"
+UPDATE_LOG_TABLE_URL = "https://centurygames.feishu.cn/base/ZjWjbTdQQaX22VsaMQzcGSLbnyc?table=tbl4vNZC0TvupOj9&view=vew4y8PbUr"
 FEISHU_APP_ID = "cli_a99e862024e7100e"
 FEISHU_APP_SECRET = "Yog0pVLeTiyjsfxtga7ltbxgd3uVbg0j"
 CURRENCY_MAINTENANCE_DIR = str(current_dir / "currency maintenance")
+UPDATE_LOG_DIR = str(current_dir / "update log")
 
 
 def _sync_currency_maintenance(logger, csv_file: str = None) -> None:
@@ -50,10 +53,102 @@ def _sync_currency_maintenance(logger, csv_file: str = None) -> None:
         else:
             logger.warning("Feishu多维表格同步失败")
     except Exception as exc:
-        logger.warning("Feishu多维表格同步异常: %s", exc)
+        import traceback
+        logger.error("Feishu多维表格同步异常: %s", exc, exc_info=True)
+        logger.error("异常堆栈: %s", traceback.format_exc())
 
 
-def generate_simple_steps_description(changes, summary, merged_to_other=None) -> str:
+def _sync_update_log(logger, csv_file: str) -> None:
+    """同步更新日志到飞书多维表格"""
+    try:
+        access_token = fetch_feishu_tenant_access_token(FEISHU_APP_ID, FEISHU_APP_SECRET)
+        table_info = fetch_feishu_table_info(UPDATE_LOG_TABLE_URL)
+        synced = sync_currency_maintenance_to_feishu(
+            csv_file=csv_file,
+            csv_dir=None,
+            app_token=table_info["app_token"],
+            table_id=table_info["table_id"],
+            access_token=access_token,
+            field_map=None,
+        )
+        if synced:
+            logger.info("Feishu更新日志同步成功")
+        else:
+            logger.warning("Feishu更新日志同步失败")
+    except Exception as exc:
+        import traceback
+        logger.error("Feishu更新日志同步异常: %s", exc, exc_info=True)
+        logger.error("异常堆栈: %s", traceback.format_exc())
+
+
+def load_should_keep_data() -> dict:
+    """
+    加载 should_keep 的数据（不符合删除条件的数据）
+    
+    Returns:
+        should_keep 数据字典: {支付方式: {币种: [Adyen%, Stripe%, Airwallex%]}}
+    """
+    should_keep_data = {}
+    payment_method_mapping = {
+        'Card': 'CARD',
+        'Apple Pay': 'AP',
+        'Google Pay': 'GP'
+    }
+    
+    current_dir = Path(__file__).parent.parent.parent
+    changelog_dir = current_dir / "currency maintenance"
+    csv_files = list(changelog_dir.glob("*.csv"))
+    
+    if csv_files:
+        latest_csv = max(csv_files, key=lambda f: f.stat().st_mtime)
+        try:
+            with open(latest_csv, 'r', encoding='utf-8-sig') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    payment_method = row.get('支付方式', '').strip()
+                    currency = row.get('币种', '').strip()
+                    network = row.get('Network', '').strip()
+                    tokenized = row.get('Network Tokenized？', '').strip()
+                    
+                    if not payment_method or not currency:
+                        continue
+                    
+                    # 判断是否符合删除条件（需要删除的）
+                    should_delete = False
+                    if payment_method == 'Apple Pay':
+                        # 所有的 Apple Pay 都要删除
+                        should_delete = True
+                    elif payment_method == 'Card' and network == 'Mastercard Visa JCB':
+                        # Network 为 Mastercard Visa JCB 的 Card 要删除
+                        should_delete = True
+                    elif payment_method == 'Google Pay' and network == '非Amex' and tokenized == 'TRUE':
+                        # Network = 非Amex 且 Network Tokenized = TRUE 的 Google Pay 要删除
+                        should_delete = True
+                    
+                    # 不符合删除条件的，保留下来
+                    if not should_delete:
+                        pm_key = payment_method_mapping.get(payment_method)
+                        if pm_key:
+                            try:
+                                adyen = int(row.get('Adyen', '') or 0)
+                                stripe = int(row.get('Stripe', '') or 0)
+                                airwallex = int(row.get('Airwallex', '') or 0)
+                                percentages = (adyen, stripe, airwallex)
+                                
+                                if pm_key not in should_keep_data:
+                                    should_keep_data[pm_key] = {}
+                                if currency not in should_keep_data[pm_key]:
+                                    should_keep_data[pm_key][currency] = []
+                                should_keep_data[pm_key][currency].append(percentages)
+                            except (ValueError, TypeError):
+                                pass
+        except:
+            pass
+    
+    return should_keep_data
+
+
+def generate_simple_steps_description(changes, summary, merged_to_other=None, should_keep_data=None) -> str:
     """
     生成简化的步骤描述
     
@@ -61,12 +156,17 @@ def generate_simple_steps_description(changes, summary, merged_to_other=None) ->
         changes: 变更列表（格式：{"action": "add/remove/modify", "payment_method": "...", "currency": "...", "old": [...], "new": [...]}）
         summary: 摘要信息
         merged_to_other: 被合并到"其他币种"的币种信息 {支付方式: [币种列表]}
+        should_keep_data: should_keep 数据字典 {支付方式: {币种: [[Adyen%, Stripe%, Airwallex%], ...]}}
         
     Returns:
         简化的步骤描述字符串
     """
     if not changes and not merged_to_other:
         return "无需调整，配置已是最新状态"
+    
+    # 如果没有提供 should_keep_data，则加载
+    if should_keep_data is None:
+        should_keep_data = load_should_keep_data()
     
     # 支付方式显示名称映射
     payment_method_display = {
@@ -91,7 +191,20 @@ def generate_simple_steps_description(changes, summary, merged_to_other=None) ->
         if new_pct and len(new_pct) >= 3:
             if pm not in steps_by_method:
                 steps_by_method[pm] = []
-            steps_by_method[pm].append(f"  添加 {curr}: Adyen {new_pct[0]}% | Stripe {new_pct[1]}% | Airwallex {new_pct[2]}%")
+            
+            # 查询 should_keep 数据中是否有相同的分量
+            matching_currencies = set()
+            if pm in should_keep_data:
+                pct_tuple = tuple(new_pct)
+                for keep_currency, keep_percentages_list in should_keep_data[pm].items():
+                    for keep_pct in keep_percentages_list:
+                        if tuple(keep_pct) == pct_tuple and keep_currency != curr:
+                            matching_currencies.add(keep_currency)
+            
+            step_text = f"  添加 {curr}: Adyen {new_pct[0]}% | Stripe {new_pct[1]}% | Airwallex {new_pct[2]}%"
+            if matching_currencies:
+                step_text += f"（该分量与保留数据中的 {', '.join(sorted(matching_currencies))} 相同）"
+            steps_by_method[pm].append(step_text)
     
     # 删除操作
     for change in removes:
@@ -110,7 +223,20 @@ def generate_simple_steps_description(changes, summary, merged_to_other=None) ->
         if old_pct and new_pct and len(old_pct) >= 3 and len(new_pct) >= 3:
             if pm not in steps_by_method:
                 steps_by_method[pm] = []
-            steps_by_method[pm].append(f"  修改 {curr}: {old_pct[0]}:{old_pct[1]}:{old_pct[2]}% → {new_pct[0]}:{new_pct[1]}:{new_pct[2]}%")
+            
+            # 查询 should_keep 数据中是否有相同的分量
+            matching_currencies = set()
+            if pm in should_keep_data:
+                pct_tuple = tuple(new_pct)
+                for keep_currency, keep_percentages_list in should_keep_data[pm].items():
+                    for keep_pct in keep_percentages_list:
+                        if tuple(keep_pct) == pct_tuple and keep_currency != curr:
+                            matching_currencies.add(keep_currency)
+            
+            step_text = f"  修改 {curr}: {old_pct[0]}:{old_pct[1]}:{old_pct[2]}% → {new_pct[0]}:{new_pct[1]}:{new_pct[2]}%"
+            if matching_currencies:
+                step_text += f"（该分量与保留数据中的 {', '.join(sorted(matching_currencies))} 相同）"
+            steps_by_method[pm].append(step_text)
     
     # 合并操作
     summary_merge = summary.get("currencies_to_merge", [])
@@ -481,6 +607,84 @@ def get_latest_changelog_csv() -> Path:
     return max(csv_files, key=lambda f: f.stat().st_mtime)
 
 
+def get_latest_update_log_csv() -> Path:
+    """从更新日志目录获取最新的CSV文件"""
+    update_log_dir = Path(UPDATE_LOG_DIR)
+    if not update_log_dir.exists():
+        raise FileNotFoundError("更新日志目录不存在")
+    csv_files = list(update_log_dir.glob("*.csv"))
+    if not csv_files:
+        raise FileNotFoundError("更新日志目录中没有找到CSV文件")
+    return max(csv_files, key=lambda f: f.stat().st_mtime)
+
+
+def parse_adjustment_sections(adjustment_text: str) -> dict:
+    """将adjustment_text拆分为CARD/AP/GP原始文本"""
+    if not adjustment_text:
+        return {}
+    sections = {}
+    current_key = None
+    buffer = []
+    valid_keys = {"CARD", "AP", "GP"}
+    for raw_line in adjustment_text.splitlines():
+        line = raw_line.rstrip("\r")
+        upper = line.strip().upper()
+        if upper in valid_keys:
+            if current_key and buffer:
+                sections[current_key] = "\n".join(buffer).strip()
+            current_key = upper
+            buffer = []
+            continue
+        if current_key:
+            buffer.append(line)
+    if current_key and buffer:
+        sections[current_key] = "\n".join(buffer).strip()
+    return {k: v for k, v in sections.items() if v}
+
+
+def save_update_log_with_adjustment(adjustment_text: str) -> str:
+    """基于最新文件追加新的调整记录并生成时间戳CSV"""
+    sections = parse_adjustment_sections(adjustment_text)
+    if not sections:
+        raise ValueError("adjustment_text 中未找到CARD/AP/GP记录，无法生成更新日志")
+    update_log_dir = Path(UPDATE_LOG_DIR)
+    update_log_dir.mkdir(parents=True, exist_ok=True)
+    latest_csv = get_latest_update_log_csv()
+    rows = []
+    fieldnames = None
+    with open(latest_csv, 'r', encoding='utf-8-sig') as f:
+        reader = csv.DictReader(f)
+        fieldnames = reader.fieldnames or ['支付方式', '日期', '日志内容', '修改内容']
+        for row in reader:
+            rows.append(row)
+    existing_count = len(rows)
+    date_str = datetime.now().strftime("%Y/%m/%d")
+    payment_method_mapping = {
+        'CARD': 'Card',
+        'AP': 'Apple Pay',
+        'GP': 'Google Pay'
+    }
+    for key, content in sections.items():
+        display_name = payment_method_mapping.get(key)
+        if not display_name:
+            continue
+        rows.append({
+            '支付方式': display_name,
+            '日期': date_str,
+            '日志内容': content.strip(),
+            '修改内容': ''
+        })
+    if len(rows) == existing_count:
+        raise ValueError("调整方案中没有有效的CARD/AP/GP内容用于记录更新日志")
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    new_csv_path = update_log_dir / f"Update log_{timestamp}.csv"
+    with open(new_csv_path, 'w', encoding='utf-8-sig', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+    return str(new_csv_path)
+
+
 def normalize_currency_name(currency: str) -> str:
     """
     标准化币种名称，处理"其他币种"和"其他"的映射
@@ -648,12 +852,17 @@ def parse_workflow():
         # 获取摘要
         summary = parser.get_summary()
         
+        # 获取CSV格式数据
+        csv_format_data = parser.get_csv_format_data()
+        
         return jsonify({
             "success": True,
             "data": {
                 "nodes": result["nodes"],
                 "conditions": result["conditions"],
-                "connections": result["connections"]
+                "connections": result["connections"],
+                "splits": result["splits"],  # 添加splits数据
+                "csv_format": csv_format_data  # 添加CSV格式数据
             },
             "summary": summary
         })
@@ -1244,8 +1453,11 @@ def process_adjustment_and_generate_steps(old_config: dict, formatted_old_config
         elif change["action"] == "modify":
             summary["currencies_to_modify"][f"{pm}_{curr}"] = change
     
-    # 生成简化的步骤描述（包含被合并到"其他币种"的信息）
-    steps_description = generate_simple_steps_description(changes, summary, merged_to_other)
+    # 加载 should_keep 数据
+    should_keep_data = load_should_keep_data()
+    
+    # 生成简化的步骤描述（包含被合并到"其他币种"的信息，以及 should_keep 数据中的相同分量信息）
+    steps_description = generate_simple_steps_description(changes, summary, merged_to_other, should_keep_data)
     
     return new_config, changes, summary, steps_description
 
@@ -1304,60 +1516,48 @@ def feishu_webhook():
     logger = logging.getLogger(__name__)
     
     try:
-        raw_data = request.get_data(as_text=True)
-        adjustment_text, adjustment_mode = extract_adjustment_from_request(raw_data)
-        logger.info("Feishu webhook: mode=%s, payload_length=%s", adjustment_mode, len(raw_data))
+        adjustment_text, adjustment_mode = extract_adjustment_from_request(request.get_data(as_text=True))
+        logger.info("Feishu webhook: mode=%s", adjustment_mode)
         
+        old_csv_path = get_latest_changelog_csv()
         old_config = load_old_config_from_changelog()
-        formatted_old_config = format_config_for_comparator(old_config)
-        
-        new_config, changes, _summary, steps_description = process_adjustment_and_generate_steps(
-            old_config,
-            formatted_old_config,
-            adjustment_text,
-            adjustment_mode
+        new_config, changes, _, steps_description = process_adjustment_and_generate_steps(
+            old_config, format_config_for_comparator(old_config), adjustment_text, adjustment_mode
         )
         logger.info("Feishu webhook: processed %s change(s)", len(changes))
         
-        normalized_new_config = normalize_config_for_csv(new_config)
-        csv_file_path = save_new_config_to_changelog(normalized_new_config)
+        csv_file_path = save_new_config_to_changelog(normalize_config_for_csv(new_config))
+        update_log_csv_path = save_update_log_with_adjustment(adjustment_text)
         
         _sync_currency_maintenance(logger, csv_file=csv_file_path)
+        _sync_update_log(logger, csv_file=update_log_csv_path)
         
-        return jsonify({"success": True, "steps": steps_description})
+        return jsonify({
+            "success": True,
+            "steps": steps_description,
+            "old_config": old_csv_path.name,
+            "new_config": Path(csv_file_path).name,
+            "update_log": Path(update_log_csv_path).name
+        })
         
     except ValueError as e:
         logger.error("参数错误: %s", e)
         return jsonify({"success": False, "error": str(e)}), 400
     except FileNotFoundError as e:
         logger.error("文件未找到: %s", e)
-        return jsonify({
-            "success": False,
-            "error": "找不到币种维护CSV文件",
-            "message": str(e)
-        }), 404
+        return jsonify({"success": False, "error": "找不到币种维护CSV文件", "message": str(e)}), 404
     except Exception as e:
         import traceback
-        logger.error("处理Webhook请求时发生错误: %s", e)
-        logger.error(traceback.format_exc())
+        logger.error("处理Webhook请求时发生错误: %s", e, exc_info=True)
         error_msg = str(e)
-        if "读取" in error_msg or "read" in error_msg.lower():
-            return jsonify({
-                "success": False,
-                "error": "读取币种维护CSV文件失败",
-                "message": error_msg
-            }), 500
-        elif "保存" in error_msg or "save" in error_msg.lower() or "write" in error_msg.lower():
-            return jsonify({
-                "success": False,
-                "error": "保存币种维护CSV文件失败",
-                "message": error_msg
-            }), 500
-        else:
-            return jsonify({
-                "success": False,
-                "error": f"处理失败: {error_msg}"
-            }), 500
+        error_map = {
+            ("读取", "read"): "读取币种维护CSV文件失败",
+            ("保存", "save", "write"): "保存币种维护CSV文件失败"
+        }
+        for keywords, msg in error_map.items():
+            if any(kw in error_msg or kw in error_msg.lower() for kw in keywords):
+                return jsonify({"success": False, "error": msg, "message": error_msg}), 500
+        return jsonify({"success": False, "error": f"处理失败: {error_msg}"}), 500
 
 
 @workflow_api.route('/health', methods=['GET'])

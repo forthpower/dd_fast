@@ -1,0 +1,40 @@
+# 设置默认行尾符为 LF（Unix/Mac 风格）
+* text=auto eol=lf
+
+# 确保 Python 文件使用 LF
+*.py text eol=lf
+*.pyw text eol=lf
+
+# 确保配置文件使用 LF
+*.txt text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.ini text eol=lf
+*.cfg text eol=lf
+*.conf text eol=lf
+
+# 确保脚本文件使用 LF
+*.sh text eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# 确保 Web 文件使用 LF
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+
+# 二进制文件
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tar binary
+*.gz binary
+

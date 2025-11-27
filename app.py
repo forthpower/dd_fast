@@ -238,11 +238,15 @@ class DDFastApp(rumps.App):
         """打开Workflow可视化工具"""
         try:
             print("正在打开Workflow可视化工具...")
+            import traceback
             self.workflow_visualizer_manager.open_feature()
             print("Workflow可视化工具已打开")
         except Exception as e:
-            print(f"打开Workflow可视化工具失败: {str(e)}")
-            rumps.alert("错误", f"打开Workflow可视化工具失败: {str(e)}")
+            import traceback
+            error_msg = f"打开Workflow可视化工具失败: {str(e)}"
+            print(error_msg)
+            traceback.print_exc()
+            rumps.alert("错误", error_msg)
 
 
 def main():

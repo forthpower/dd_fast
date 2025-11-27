@@ -23,41 +23,53 @@
             margin: 0 auto;
         }
 
+        .top-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: stretch;
+            flex-wrap: wrap;
+        }
+
         .header {
             background: white;
             border-radius: 10px;
-            padding: 15px 20px;
+            padding: 12px 16px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 15px;
+            flex: 1 1 320px;
         }
 
         .header h1 {
             color: #2c3e50;
-            font-size: 24px;
-            margin-bottom: 5px;
+            font-size: 20px;
+            margin-bottom: 4px;
         }
 
         .header p {
             color: #7f8c8d;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .upload-section {
             background: white;
             border-radius: 10px;
-            padding: 20px;
+            padding: 12px 16px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             text-align: center;
-            margin-bottom: 15px;
+            flex: 1 1 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .upload-area {
             border: 2px dashed #3498db;
             border-radius: 8px;
-            padding: 30px 20px;
+            padding: 20px 16px;
             background: #f8f9fa;
             cursor: pointer;
             transition: all 0.3s ease;
+            width: 100%;
         }
 
         .upload-area:hover {
@@ -71,19 +83,90 @@
         }
 
         .upload-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
+            font-size: 36px;
+            margin-bottom: 8px;
         }
 
         .upload-text {
             color: #2c3e50;
-            font-size: 16px;
-            margin-bottom: 5px;
+            font-size: 14px;
+            margin-bottom: 4px;
         }
 
         .upload-hint {
             color: #7f8c8d;
             font-size: 12px;
+        }
+
+        .filter-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            background: #f9fafb;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+        }
+
+        .filter-field {
+            flex: 1 1 180px;
+            min-width: 150px;
+        }
+
+        .filter-field label {
+            display: block;
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .filter-field select,
+        .filter-field input {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #374151;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        .table-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .edit-input,
+        .edit-select {
+            width: 100%;
+            padding: 4px 6px;
+            border: 1px solid #cbd5f5;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .action-cell {
+            white-space: nowrap;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+            margin: 0;
         }
 
         #fileInput {
@@ -133,108 +216,6 @@
             display: none;
         }
 
-        .workflow-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #ecf0f1;
-        }
-
-        .workflow-header h2 {
-            color: #2c3e50;
-            font-size: 20px;
-        }
-
-        .stats {
-            display: flex;
-            gap: 10px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            text-align: center;
-            min-width: 90px;
-        }
-
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 3px;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            opacity: 0.9;
-        }
-
-        .nodes-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 12px;
-            margin-top: 12px;
-        }
-
-        .node-card {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 12px;
-            border-left: 3px solid #3498db;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .node-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-
-        .node-card.trigger {
-            border-left-color: #9b59b6;
-        }
-
-        .node-card.condition {
-            border-left-color: #e67e22;
-        }
-
-        .node-card.component {
-            border-left-color: #3498db;
-        }
-
-        .node-card.action {
-            border-left-color: #27ae60;
-        }
-
-        .node-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-
-        .node-id {
-            font-family: 'Consolas', monospace;
-            font-size: 12px;
-            color: #7f8c8d;
-            margin-bottom: 5px;
-        }
-
-        .node-type {
-            font-size: 14px;
-            color: #7f8c8d;
-            margin-bottom: 5px;
-        }
-
-        .node-description {
-            font-size: 13px;
-            color: #2c3e50;
-            margin-top: 10px;
-            line-height: 1.5;
-        }
 
         .loading {
             text-align: center;
@@ -266,78 +247,7 @@
             font-size: 64px;
             margin-bottom: 20px;
         }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-        }
-
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            max-width: 800px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #ecf0f1;
-        }
-
-        .modal-header h3 {
-            color: #2c3e50;
-            font-size: 24px;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 32px;
-            cursor: pointer;
-            color: #7f8c8d;
-        }
-
-        .close-btn:hover {
-            color: #e74c3c;
-        }
-
-        .detail-section {
-            margin-bottom: 20px;
-        }
-
-        .detail-label {
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-
-        .detail-value {
-            color: #7f8c8d;
-            font-family: 'Consolas', monospace;
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 5px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            max-height: 300px;
-            overflow-y: auto;
-        }
+ 
 
         .error-message {
             background: #fee;
@@ -350,452 +260,52 @@
         /* Split样式 */
         .splits-container {
             display: none;
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-top: 15px;
         }
 
-        .splits-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #ecf0f1;
-        }
-
-        .splits-header h2 {
-            color: #2c3e50;
-            font-size: 20px;
-        }
-
-        .splits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 12px;
-        }
-
-        .split-card {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 12px;
-            border-left: 3px solid #9b59b6;
-        }
-
-        .split-condition {
-            background: #3498db;
-            color: white;
-            padding: 6px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: inline-block;
-        }
-
-        .split-condition.none {
-            background: #95a5a6;
-        }
-
-        .split-routes {
-            margin-top: 10px;
-        }
-
-        .route-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            padding: 8px;
-            background: white;
-            border-radius: 4px;
-        }
-
-        .route-name {
-            font-weight: bold;
-            color: #2c3e50;
-            min-width: 100px;
-            font-size: 13px;
-        }
-
-        .route-bar {
-            flex: 1;
-            height: 20px;
-            background: #ecf0f1;
-            border-radius: 10px;
-            margin: 0 8px;
-            overflow: hidden;
+        /* 表格排序样式 */
+        .sortable-header {
+            cursor: pointer;
+            user-select: none;
             position: relative;
+            padding-right: 20px !important;
         }
 
-        .route-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #3498db, #2ecc71);
-            border-radius: 10px;
-            transition: width 0.5s ease;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 8px;
-            color: white;
-            font-size: 11px;
-            font-weight: bold;
+        .sortable-header:hover {
+            background-color: #e9ecef !important;
         }
 
-        .route-percentage {
-            font-size: 14px;
-            font-weight: bold;
-            color: #2c3e50;
-            min-width: 50px;
-            text-align: right;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .tab {
-            background: #ecf0f1;
-            color: #2c3e50;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .tab.active {
-            background: #3498db;
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* 对比功能样式 */
-        .compare-section {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .compare-header {
-            margin-bottom: 12px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #ecf0f1;
-        }
-
-        .compare-header h3 {
-            color: #2c3e50;
-            font-size: 18px;
-            margin-bottom: 3px;
-        }
-
-        .compare-header p {
-            color: #7f8c8d;
+        .sortable-header::after {
+            content: '⇅';
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
             font-size: 12px;
+            color: #6c757d;
+            opacity: 0.5;
         }
 
-        .adjustment-textarea {
-            width: 100%;
-            min-height: 150px;
-            padding: 10px;
-            border: 2px solid #ecf0f1;
-            border-radius: 6px;
-            font-family: 'Consolas', monospace;
-            font-size: 13px;
-            margin-bottom: 12px;
-            resize: vertical;
+        .sortable-header.sort-asc::after {
+            content: '↑';
+            opacity: 1;
+            color: #3498db;
         }
 
-        .adjustment-textarea:focus {
-            outline: none;
-            border-color: #3498db;
+        .sortable-header.sort-desc::after {
+            content: '↓';
+            opacity: 1;
+            color: #3498db;
         }
 
-        .compare-result {
-            margin-top: 15px;
-            display: none;
-        }
-
-        .compare-summary {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 12px;
-        }
-
-        .compare-summary h4 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-
-        .change-item {
-            background: white;
-            border-radius: 6px;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-left: 3px solid #3498db;
-        }
-
-        .change-item.add {
-            border-left-color: #27ae60;
-        }
-
-        .change-item.remove {
-            border-left-color: #e74c3c;
-        }
-
-        .change-item.modify {
-            border-left-color: #f39c12;
-        }
-
-        .change-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .change-title {
-            font-weight: bold;
-            color: #2c3e50;
-            font-size: 15px;
-        }
-
-        .change-action {
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        .change-action.add {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .change-action.remove {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .change-action.modify {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .change-content {
-            margin-top: 8px;
-        }
-
-        .change-row {
-            display: flex;
-            margin-bottom: 6px;
-            align-items: center;
-            font-size: 13px;
-        }
-
-        .change-label {
-            min-width: 80px;
-            color: #7f8c8d;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .change-value {
-            flex: 1;
-            color: #2c3e50;
-            font-size: 13px;
-        }
-
-        .change-percentage {
-            display: inline-block;
-            padding: 2px 8px;
-            background: #e7f3ff;
-            border-radius: 4px;
-            margin: 0 3px;
-            font-weight: bold;
-        }
-
-        .change-instructions {
-            margin-top: 8px;
-            padding: 8px;
-            background: #e7f3ff;
-            border-radius: 4px;
-            color: #004085;
-            font-size: 13px;
-        }
-
-        .change-instructions ul {
-            margin: 3px 0;
-            padding-left: 18px;
-        }
-
-        /* 完整分量对比样式 */
-        .full-comparison {
-            margin-top: 20px;
-            display: none;
-        }
-
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        .comparison-table th {
-            background: #3498db;
-            color: white;
-            padding: 10px;
-            text-align: left;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        .comparison-table td {
-            padding: 8px 10px;
-            border-bottom: 1px solid #ecf0f1;
-            font-size: 13px;
-        }
-
-        .comparison-table tr:hover {
-            background: #f8f9fa;
-        }
-
-        .comparison-payment-header {
-            background: #2c3e50 !important;
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .comparison-currency {
-            font-weight: 500;
-            color: #2c3e50;
-        }
-
-        .comparison-percentages {
-            display: flex;
-            gap: 8px;
-        }
-
-        .comparison-percentage-item {
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .comparison-percentage-item.adyen {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .comparison-percentage-item.stripe {
-            background: #f3e5f5;
-            color: #7b1fa2;
-        }
-
-        .comparison-percentage-item.awx {
-            background: #e8f5e9;
-            color: #388e3c;
-        }
-
-        /* 分量对比功能区域样式 */
-        .split-comparison-section {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-top: 0;
-        }
-
-        .section-header {
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #ecf0f1;
-        }
-
-        .section-header h2 {
-            color: #2c3e50;
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-
-        .section-header p {
-            color: #7f8c8d;
-            font-size: 14px;
-        }
-
-        /* 功能选择标签样式 */
-        .feature-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            background: white;
-            border-radius: 10px;
-            padding: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .feature-tab {
-            flex: 1;
-            padding: 12px 20px;
-            background: #ecf0f1;
-            color: #2c3e50;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 15px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .feature-tab:hover {
-            background: #d5dbdb;
-        }
-
-        .feature-tab.active {
-            background: #3498db;
-            color: white;
-        }
-
-        .feature-content {
-            display: none;
-        }
-
-        .feature-content.active {
-            display: block;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🔀 Workflow工具集</h1>
-            <p>Workflow可视化 & 分量对比分析</p>
-        </div>
-
-        <!-- 功能选择标签 -->
-        <div class="feature-tabs">
-            <div class="feature-tab active" onclick="switchFeature('visualize')">📊 Workflow可视化</div>
-            <div class="feature-tab" onclick="switchFeature('compare')">⚖️ 分量对比分析</div>
-        </div>
-
-        <!-- Workflow可视化功能 -->
-        <div class="feature-content active" id="visualizeFeature">
+        <div class="top-bar">
+            <div class="header">
+                <h1>🔀 Workflow币种分量解析</h1>
+                <p>上传JSON文件，解析并显示币种分量信息</p>
+            </div>
             <div class="upload-section">
                 <div class="upload-area" id="uploadArea">
                     <div class="upload-icon">📁</div>
@@ -804,71 +314,13 @@
                     <input type="file" id="fileInput" accept=".json">
                 </div>
             </div>
+        </div>
 
+        <!-- Workflow可视化功能 -->
+        <div class="feature-content active" id="visualizeFeature">
         <div class="workflow-container" id="workflowContainer">
-            <div class="workflow-header">
-                <h2>📊 工作流可视化</h2>
-                <div class="stats">
-                    <div class="stat-card">
-                        <div class="stat-value" id="nodeCount">0</div>
-                        <div class="stat-label">节点数</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="connectionCount">0</div>
-                        <div class="stat-label">连接数</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="splitCount">0</div>
-                        <div class="stat-label">Split数</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 选项卡 -->
-            <div class="tabs">
-                <div class="tab active" onclick="switchTab('nodes')">📋 所有节点</div>
-                <div class="tab" onclick="switchTab('splits')">🔀 Split分布</div>
-                <div class="tab" onclick="switchTab('compare')">⚖️ 分量对比（JSON）</div>
-            </div>
-
-            <!-- 节点列表 -->
-            <div class="tab-content active" id="nodesTab">
-                <div class="nodes-container" id="nodesContainer"></div>
-            </div>
-
-            <!-- Split可视化 -->
-            <div class="tab-content" id="splitsTab">
+            <!-- 币种分量显示 -->
                 <div class="splits-container" id="splitsContainer"></div>
-            </div>
-
-            <!-- 分量对比 -->
-            <div class="tab-content" id="compareTab">
-                <div class="compare-section">
-                    <div class="compare-header">
-                        <h3>📝 输入调整方案</h3>
-                        <p>粘贴您的分量调整方案文本</p>
-                    </div>
-                    <textarea id="adjustmentText" class="adjustment-textarea" placeholder="例如：
-CARD
-USD - 20%：40%：40%
-KRW/EUR/AED - 40%：20%：40%
-JPY - 20%：20%：60%"></textarea>
-                    <div style="margin-bottom: 12px;">
-                        <label style="font-weight: bold; color: #2c3e50; margin-right: 10px;">调整模式：</label>
-                        <label style="margin-right: 15px; cursor: pointer;">
-                            <input type="radio" name="adjustmentMode" value="update" checked style="margin-right: 5px;">
-                            <span>更新调整（只调整指定币种，其他保持原样）</span>
-                        </label>
-                        <label style="cursor: pointer;">
-                            <input type="radio" name="adjustmentMode" value="override" style="margin-right: 5px;">
-                            <span>覆盖调整（全部按照新方案设置）</span>
-                        </label>
-                    </div>
-                    <button class="btn btn-success" onclick="compareSplits()">开始对比</button>
-                    <div id="compareResult" class="compare-result"></div>
-                    <div id="fullComparison" class="full-comparison"></div>
-                </div>
-            </div>
 
             <div class="loading" id="loadingState" style="display: none;">
                 <div class="loading-spinner"></div>
@@ -877,94 +329,43 @@ JPY - 20%：20%：60%"></textarea>
 
             <div class="empty-state" id="emptyState">
                 <div class="empty-state-icon">📋</div>
-                <p>请上传JSON文件以开始可视化</p>
+                <p>请上传JSON文件以开始解析</p>
             </div>
-            </div>
-        </div>
-
-        <!-- 分量对比分析功能 -->
-        <div class="feature-content" id="compareFeature">
-            <div class="split-comparison-section">
-                <div class="section-header">
-                    <h2>⚖️ 分量对比分析</h2>
-                    <p>输入调整方案，系统将自动读取Primer Workflow文档进行分量对比</p>
-                </div>
-
-                <div class="compare-section">
-                    <div class="compare-header">
-                        <h3>📝 输入调整方案</h3>
-                        <p>粘贴您的分量调整方案文本</p>
-                    </div>
-                    <textarea id="docAdjustmentText" class="adjustment-textarea" placeholder="例如：
-CARD
-USD - 20%：40%：40%
-KRW/EUR/AED - 40%：20%：40%
-JPY - 20%：20%：60%"></textarea>
-                    <div style="margin-bottom: 12px;">
-                        <label style="font-weight: bold; color: #2c3e50; margin-right: 10px;">调整模式：</label>
-                        <label style="margin-right: 15px; cursor: pointer;">
-                            <input type="radio" name="docAdjustmentMode" value="update" checked style="margin-right: 5px;">
-                            <span>更新调整（只调整指定币种，其他保持原样）</span>
-                        </label>
-                        <label style="cursor: pointer;">
-                            <input type="radio" name="docAdjustmentMode" value="override" style="margin-right: 5px;">
-                            <span>覆盖调整（全部按照新方案设置）</span>
-                        </label>
-                    </div>
-                    <button class="btn btn-success" onclick="compareDocSplits()">开始对比</button>
-                    <div id="docCompareResult" class="compare-result"></div>
-                    <div id="docFullComparison" class="full-comparison"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal for node details -->
-    <div class="modal" id="nodeModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>节点详情</h3>
-                <button class="close-btn" onclick="closeModal()">&times;</button>
-            </div>
-            <div id="modalBody"></div>
         </div>
     </div>
 
     <script>
         let workflowData = null;
         let uploadedFile = null;  // 保存上传的文件
+        let uploadedFileName = '';
+        let originalUploadedJson = null;
+        let originalJsonIsTable = false;
+        let originalJsonRowIdMap = [];
+        let removedOriginalRowIds = new Set();
+        let currentSort = { column: null, direction: null };  // 当前排序状态
+        let allCSVRows = [];  // 保存所有CSV行数据，用于排序
+        let filterState = {
+            paymentMethod: 'all',
+            network: 'all',
+            affinity: 'all',
+            adaptive3ds: 'all',
+            tokenized: 'all'
+        };
+        let editingRowId = null;
+        let rowIdCounter = 0;
+        const editableFields = ['支付方式','Network','币种','开启Affinity','Adaptive 3DS','备注','Network Tokenized？','Adyen','Stripe','Airwallex'];
 
-        // 功能切换
-        function switchFeature(feature) {
-            console.log('切换功能:', feature); // 调试用
-            
-            // 切换标签样式
-            document.querySelectorAll('.feature-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelectorAll('.feature-content').forEach(content => {
-                content.classList.remove('active');
-            });
+        function generateRowId() {
+            return `row_${Date.now()}_${rowIdCounter++}`;
+        }
 
-            if (feature === 'visualize') {
-                const tab = document.querySelectorAll('.feature-tab')[0];
-                const content = document.getElementById('visualizeFeature');
-                if (tab) tab.classList.add('active');
-                if (content) {
-                    content.classList.add('active');
-                    console.log('显示可视化功能');
-                }
-            } else if (feature === 'compare') {
-                const tab = document.querySelectorAll('.feature-tab')[1];
-                const content = document.getElementById('compareFeature');
-                if (tab) tab.classList.add('active');
-                if (content) {
-                    content.classList.add('active');
-                    console.log('显示对比功能', content);
-                } else {
-                    console.error('找不到 compareFeature 元素');
-                }
-            }
+        function cloneRow(row) {
+            const clone = {};
+            Object.keys(row || {}).forEach(key => {
+                if (key === '_id') return;
+                clone[key] = row[key];
+            });
+            return clone;
         }
 
         // 文件上传处理
@@ -1009,6 +410,7 @@ JPY - 20%：20%：60%"></textarea>
             document.getElementById('workflowContainer').style.display = 'none';
 
             try {
+                uploadedFileName = file.name;
                 // 上传到后端解析
                 const formData = new FormData();
                 formData.append('file', file);
@@ -1018,13 +420,27 @@ JPY - 20%：20%：60%"></textarea>
                     body: formData
                 });
 
+                const fileText = await file.text();
+                try {
+                    originalUploadedJson = JSON.parse(fileText);
+                    originalJsonIsTable = Array.isArray(originalUploadedJson) && originalUploadedJson.every(item => typeof item === 'object');
+                } catch (err) {
+                    originalUploadedJson = null;
+                    originalJsonIsTable = false;
+                }
+                originalJsonRowIdMap = [];
+                removedOriginalRowIds = new Set();
                 const result = await response.json();
 
                 if (result.success) {
                     workflowData = result.data;
                     uploadedFile = file;  // 保存文件引用
-                    renderWorkflow(result.data.nodes, result.data.connections, result.summary);
-                    renderSplits(result.data.splits || []);
+                    // 优先使用CSV格式数据，如果没有则使用splits
+                    if (result.data.csv_format) {
+                        renderSplitsFromCSV(result.data.csv_format);
+                    } else {
+                        renderSplits(result.data.splits || []);
+                    }
                     document.getElementById('loadingState').style.display = 'none';
                     document.getElementById('workflowContainer').style.display = 'block';
                 } else {
@@ -1041,38 +457,652 @@ JPY - 20%：20%：60%"></textarea>
             }
         }
 
-        function renderWorkflow(nodes, connections, summary) {
-            document.getElementById('nodeCount').textContent = summary.total_nodes;
-            document.getElementById('connectionCount').textContent = summary.total_connections;
-            document.getElementById('splitCount').textContent = summary.total_splits || 0;
 
-            const container = document.getElementById('nodesContainer');
-            container.innerHTML = '';
-
-            nodes.forEach(node => {
-                const card = document.createElement('div');
+        // 排序函数
+        function sortCSVRows(rows, column, direction) {
+            if (!column) return rows;
+            
+            return [...rows].sort((a, b) => {
+                let aVal = a[column] || '';
+                let bVal = b[column] || '';
                 
-                // 根据类型设置样式
-                let cardClass = 'node-card ';
-                if (node.type === 'TRIGGER') {
-                    cardClass += 'trigger';
-                } else if (node.type.includes('ACTION')) {
-                    cardClass += 'action';
+                // 处理数字类型（Adyen, Stripe, Airwallex）
+                if (['Adyen', 'Stripe', 'Airwallex'].includes(column)) {
+                    aVal = parseFloat(aVal) || 0;
+                    bVal = parseFloat(bVal) || 0;
                 } else {
-                    cardClass += 'component';
+                    // 字符串类型，转换为字符串比较
+                    aVal = String(aVal);
+                    bVal = String(bVal);
                 }
                 
-                card.className = cardClass;
+                let comparison = 0;
+                if (aVal < bVal) {
+                    comparison = -1;
+                } else if (aVal > bVal) {
+                    comparison = 1;
+                }
                 
-                card.innerHTML = `
-                    <div class="node-title">${escapeHtml(node.name)}</div>
-                    <div class="node-id">ID: ${escapeHtml(node.id.substring(0, 30))}...</div>
-                    <div class="node-type">类型: ${escapeHtml(node.type)}</div>
-                    ${node.description ? `<div class="node-description">${escapeHtml(node.description.substring(0, 100))}${node.description.length > 100 ? '...' : ''}</div>` : ''}
-                `;
-                card.addEventListener('click', () => showNodeDetails(node));
-                container.appendChild(card);
+                return direction === 'asc' ? comparison : -comparison;
             });
+        }
+
+        function applyFilters(rows) {
+            if (!rows || rows.length === 0) return [];
+            return rows.filter(row => {
+                if (filterState.paymentMethod !== 'all' && row['支付方式'] !== filterState.paymentMethod) {
+                    return false;
+                }
+                if (filterState.network !== 'all' && row['Network'] !== filterState.network) {
+                    return false;
+                }
+                if (filterState.affinity !== 'all' && row['开启Affinity'] !== filterState.affinity) {
+                    return false;
+                }
+                if (filterState.adaptive3ds !== 'all' && row['Adaptive 3DS'] !== filterState.adaptive3ds) {
+                    return false;
+                }
+                if (filterState.tokenized !== 'all' && row['Network Tokenized？'] != filterState.tokenized) {
+                    return false;
+                }
+                return true;
+            });
+        }
+
+        function buildFilterControls(baseRows = []) {
+            const paymentOptions = Array.from(new Set(baseRows.map(row => row['支付方式']).filter(Boolean))).sort();
+            const networkOptions = Array.from(new Set(baseRows.map(row => row['Network']).filter(Boolean))).sort();
+            const affinityOptions = Array.from(new Set(baseRows.map(row => row['开启Affinity']).filter(Boolean))).sort();
+            const adaptiveOptions = Array.from(new Set(baseRows.map(row => row['Adaptive 3DS']).filter(Boolean))).sort();
+            const tokenizedOptions = Array.from(new Set(baseRows.map(row => row['Network Tokenized？']).filter(Boolean))).sort();
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'filter-controls';
+
+            const createSelectField = (labelText, options, currentValue, onChange) => {
+                const field = document.createElement('div');
+                field.className = 'filter-field';
+                const label = document.createElement('label');
+                label.textContent = labelText;
+                const select = document.createElement('select');
+                select.innerHTML = `<option value="all">全部</option>` + options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+                select.value = currentValue;
+                select.addEventListener('change', (e) => onChange(e.target.value));
+                field.appendChild(label);
+                field.appendChild(select);
+                return field;
+            };
+
+            const paymentField = createSelectField('支付方式', paymentOptions, filterState.paymentMethod, (value) => {
+                filterState.paymentMethod = value;
+                renderSplitsFromCSV(null, { skipSave: true });
+            });
+
+            const networkField = createSelectField('Network', networkOptions, filterState.network, (value) => {
+                filterState.network = value;
+                renderSplitsFromCSV(null, { skipSave: true });
+            });
+
+            const affinityField = createSelectField('开启Affinity', affinityOptions, filterState.affinity, (value) => {
+                filterState.affinity = value;
+                renderSplitsFromCSV(null, { skipSave: true });
+            });
+
+            const adaptiveField = createSelectField('Adaptive 3DS', adaptiveOptions, filterState.adaptive3ds, (value) => {
+                filterState.adaptive3ds = value;
+                renderSplitsFromCSV(null, { skipSave: true });
+            });
+
+            const tokenizedField = createSelectField('Network Tokenized？', tokenizedOptions, filterState.tokenized, (value) => {
+                filterState.tokenized = value;
+                renderSplitsFromCSV(null, { skipSave: true });
+            });
+
+            const actions = document.createElement('div');
+            actions.className = 'filter-actions';
+            const resetBtn = document.createElement('button');
+            resetBtn.type = 'button';
+            resetBtn.className = 'btn btn-small';
+            resetBtn.textContent = '重置筛选';
+            resetBtn.addEventListener('click', () => {
+                filterState = {
+                    paymentMethod: 'all',
+                    network: 'all',
+                    affinity: 'all',
+                    adaptive3ds: 'all',
+                    tokenized: 'all'
+                };
+                renderSplitsFromCSV(null, { skipSave: true });
+            });
+            actions.appendChild(resetBtn);
+
+            wrapper.appendChild(paymentField);
+            wrapper.appendChild(networkField);
+            wrapper.appendChild(affinityField);
+            wrapper.appendChild(adaptiveField);
+            wrapper.appendChild(tokenizedField);
+            wrapper.appendChild(actions);
+
+            return wrapper;
+        }
+
+        // 处理排序点击
+        function handleSort(column) {
+            // 如果点击的是同一列，切换排序方向
+            if (currentSort.column === column) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                // 新列，默认升序
+                currentSort.column = column;
+                currentSort.direction = 'asc';
+            }
+            
+            // 重新渲染表格（使用已保存的数据）
+            if (workflowData && workflowData.csv_format) {
+                renderSplitsFromCSV(null, { skipSave: true });
+            } else if (workflowData && workflowData.splits) {
+                renderSplits(workflowData.splits);
+            } else if (allCSVRows.length > 0) {
+                renderSplitsFromCSV(null, { skipSave: true });
+            }
+        }
+
+        
+        // 辅助函数：获取默认Network
+        function getDefaultNetwork(paymentMethod) {
+            const mapping = {
+                'CARD': 'Mastercard Visa JCB',
+                'AP': '',
+                'GP': '非Amex'
+            };
+            return mapping[paymentMethod] || '';
+        }
+        
+        // 辅助函数：获取默认Affinity
+        function getDefaultAffinity(paymentMethod, currency) {
+            if (paymentMethod === 'AP') {
+                return currency !== '其他' ? '是' : '否';
+            }
+            return '是';
+        }
+        
+        // 辅助函数：获取默认Adaptive 3DS
+        function getDefaultAdaptive3DS(paymentMethod) {
+            const mapping = {
+                'CARD': '部分开启',
+                'AP': '否',
+                'GP': '否'
+            };
+            return mapping[paymentMethod] || '否';
+        }
+        
+        // 辅助函数：获取默认Tokenized
+        function getDefaultTokenized(paymentMethod) {
+            return paymentMethod === 'GP' ? 'TRUE' : '';
+        }
+        
+        // 辅助函数：从CSV支付方式名称获取显示名称
+        function getPaymentMethodDisplayNameFromCSV(csvName) {
+            const mapping = {
+                'Card': '💳 Card',
+                'Apple Pay': '🍎 Apple Pay',
+                'Google Pay': '📱 Google Pay'
+            };
+            return mapping[csvName] || csvName;
+        }
+
+        // 从CSV格式数据渲染（优先使用）
+        function renderSplitsFromCSV(csvData, options = {}) {
+            const { skipSave = false } = options;
+            const container = document.getElementById('splitsContainer');
+            container.innerHTML = '';
+            container.style.display = 'block';
+
+            if (!skipSave && csvData) {
+                const normalizedRows = [];
+                if (Array.isArray(csvData)) {
+                    csvData.forEach(row => normalizedRows.push({ ...row }));
+                } else if (csvData && typeof csvData === 'object') {
+                    Object.keys(csvData).forEach(paymentMethod => {
+                        const currencies = csvData[paymentMethod];
+                        Object.keys(currencies || {}).forEach(currency => {
+                            const [adyen, stripe, airwallex] = currencies[currency];
+                            normalizedRows.push({
+                                '支付方式': getPaymentMethodCSVName(paymentMethod),
+                                'Network': getDefaultNetwork(paymentMethod),
+                                '币种': currency,
+                                '开启Affinity': getDefaultAffinity(paymentMethod, currency),
+                                'Adaptive 3DS': getDefaultAdaptive3DS(paymentMethod),
+                                '备注': '',
+                                'Network Tokenized？': getDefaultTokenized(paymentMethod),
+                                'Adyen': adyen,
+                                'Stripe': stripe,
+                                'Airwallex': airwallex
+                            });
+                        });
+                    });
+                }
+
+                if (normalizedRows.length) {
+                    allCSVRows = normalizedRows.map(row => ({
+                        ...row,
+                        _id: row._id || generateRowId()
+                    }));
+                } else {
+                    allCSVRows = [];
+                }
+                editingRowId = null;
+                filterState = {
+                    paymentMethod: 'all',
+                    network: 'all',
+                    affinity: 'all',
+                    adaptive3ds: 'all',
+                    tokenized: 'all'
+                };
+                if (originalJsonIsTable) {
+                    originalJsonRowIdMap = allCSVRows.map(row => row._id);
+                    removedOriginalRowIds = new Set();
+                } else {
+                    originalJsonRowIdMap = [];
+                    removedOriginalRowIds = new Set();
+                }
+                if (!allCSVRows.length) {
+                    container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔀</div><p>未找到Split节点</p></div>';
+                    return;
+                }
+            }
+
+            if (!allCSVRows.length) {
+                container.appendChild(buildTableActions());
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'empty-state';
+                emptyDiv.innerHTML = '<div class="empty-state-icon">🔀</div><p>未找到Split节点</p>';
+                container.appendChild(emptyDiv);
+                return;
+            }
+
+            container.appendChild(buildFilterControls(allCSVRows));
+            container.appendChild(buildTableActions());
+
+            const filteredRows = applyFilters(allCSVRows);
+            const rowsToRender = currentSort.column
+                ? sortCSVRows(filteredRows, currentSort.column, currentSort.direction)
+                : filteredRows;
+
+            if (!rowsToRender.length) {
+                const emptyFiltered = document.createElement('div');
+                emptyFiltered.className = 'empty-state';
+                emptyFiltered.innerHTML = '<div class="empty-state-icon">🔍</div><p>未找到匹配的数据</p>';
+                container.appendChild(emptyFiltered);
+                return;
+            }
+
+            const tableContainer = document.createElement('div');
+            tableContainer.style.cssText = 'background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow-x: auto;';
+
+            const table = document.createElement('table');
+            table.style.cssText = 'width: 100%; border-collapse: collapse; font-size: 13px;';
+
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            headerRow.style.cssText = 'background: #f8f9fa; border-bottom: 2px solid #dee2e6;';
+
+            const sortableColumns = [
+                { name: '支付方式', align: 'left' },
+                { name: 'Network', align: 'left' },
+                { name: '币种', align: 'left' },
+                { name: '开启Affinity', align: 'center' },
+                { name: 'Adaptive 3DS', align: 'center' },
+                { name: '备注', align: 'left' },
+                { name: 'Network Tokenized？', align: 'center' },
+                { name: 'Adyen', align: 'center' },
+                { name: 'Stripe', align: 'center' },
+                { name: 'Airwallex', align: 'center' }
+            ];
+
+            sortableColumns.forEach(col => {
+                const th = document.createElement('th');
+                th.textContent = col.name;
+                th.style.cssText = `padding: 10px 8px; text-align: ${col.align}; font-weight: bold; color: #2c3e50; border-bottom: 2px solid #dee2e6; white-space: nowrap;`;
+                th.className = 'sortable-header';
+                if (currentSort.column === col.name) {
+                    th.classList.add(`sort-${currentSort.direction}`);
+                }
+                th.addEventListener('click', () => handleSort(col.name));
+                headerRow.appendChild(th);
+            });
+
+            const actionHeader = document.createElement('th');
+            actionHeader.textContent = '操作';
+            actionHeader.style.cssText = 'padding: 10px 8px; text-align: center; font-weight: bold; color: #2c3e50; border-bottom: 2px solid #dee2e6; white-space: nowrap;';
+            headerRow.appendChild(actionHeader);
+
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            const tbody = document.createElement('tbody');
+
+            if (currentSort.column) {
+                rowsToRender.forEach(row => appendTableRow(tbody, row));
+            } else {
+                const paymentMethodGroups = {};
+                rowsToRender.forEach(row => {
+                    const pm = row['支付方式'];
+                    if (!paymentMethodGroups[pm]) paymentMethodGroups[pm] = [];
+                    paymentMethodGroups[pm].push(row);
+                });
+
+                const paymentOrder = ['Card', 'Apple Pay', 'Google Pay'];
+                paymentOrder.forEach(pm => {
+                    if (!paymentMethodGroups[pm] || paymentMethodGroups[pm].length === 0) return;
+                    const methodRow = document.createElement('tr');
+                    methodRow.style.cssText = 'background: #e9ecef;';
+                    methodRow.innerHTML = `
+                        <td colspan="11" style="padding: 10px 12px; font-weight: bold; color: #2c3e50; font-size: 16px;">
+                            ${getPaymentMethodDisplayNameFromCSV(pm)}
+                        </td>
+                    `;
+                    tbody.appendChild(methodRow);
+
+                    paymentMethodGroups[pm]
+                        .sort((a, b) => (a['币种'] || '').localeCompare(b['币种'] || ''))
+                        .forEach(row => appendTableRow(tbody, row));
+                });
+
+                Object.keys(paymentMethodGroups).forEach(pm => {
+                    if (paymentOrder.includes(pm)) return;
+                    const methodRow = document.createElement('tr');
+                    methodRow.style.cssText = 'background: #e9ecef;';
+                    methodRow.innerHTML = `
+                        <td colspan="11" style="padding: 10px 12px; font-weight: bold; color: #2c3e50; font-size: 16px;">
+                            ${pm}
+                        </td>
+                    `;
+                    tbody.appendChild(methodRow);
+
+                    paymentMethodGroups[pm].forEach(row => appendTableRow(tbody, row));
+                });
+            }
+
+            table.appendChild(tbody);
+            table.addEventListener('click', handleTableClick);
+            tableContainer.appendChild(table);
+            container.appendChild(tableContainer);
+        }
+
+        function buildTableActions() {
+            const bar = document.createElement('div');
+            bar.className = 'table-actions';
+
+            const addBtn = document.createElement('button');
+            addBtn.type = 'button';
+            addBtn.className = 'btn btn-small btn-success';
+            addBtn.textContent = '新增一行';
+            addBtn.addEventListener('click', addNewRow);
+
+            const exportBtn = document.createElement('button');
+            exportBtn.type = 'button';
+            exportBtn.className = 'btn btn-small btn-success';
+            exportBtn.textContent = '导出 JSON';
+            exportBtn.addEventListener('click', exportJSON);
+
+            bar.appendChild(addBtn);
+            bar.appendChild(exportBtn);
+            return bar;
+        }
+
+        function appendTableRow(tbody, row) {
+            const tr = document.createElement('tr');
+            tr.style.cssText = 'border-bottom: 1px solid #dee2e6;';
+            tr.dataset.rowId = row._id || '';
+            const isEditing = editingRowId === row._id;
+            const fields = ['支付方式','Network','币种','开启Affinity','Adaptive 3DS','备注','Network Tokenized？','Adyen','Stripe','Airwallex'];
+
+            fields.forEach(field => {
+                const td = document.createElement('td');
+                const centerFields = ['开启Affinity','Adaptive 3DS','Network Tokenized？','Adyen','Stripe','Airwallex'];
+                td.style.cssText = `padding: 8px; color: #495057;${centerFields.includes(field) ? 'text-align: center;' : ''}`;
+
+                if (isEditing) {
+                    td.appendChild(createEditorControl(field, row[field]));
+                } else {
+                    td.textContent = formatCellValue(field, row[field]);
+                }
+                tr.appendChild(td);
+            });
+
+            const actionTd = document.createElement('td');
+            actionTd.className = 'action-cell';
+            if (isEditing) {
+                const saveBtn = document.createElement('button');
+                saveBtn.type = 'button';
+                saveBtn.className = 'btn btn-small btn-success';
+                saveBtn.textContent = '保存';
+                saveBtn.dataset.action = 'save';
+                saveBtn.dataset.id = row._id;
+
+                const cancelBtn = document.createElement('button');
+                cancelBtn.type = 'button';
+                cancelBtn.className = 'btn btn-small';
+                cancelBtn.style.marginLeft = '4px';
+                cancelBtn.textContent = '取消';
+                cancelBtn.dataset.action = 'cancel';
+
+                actionTd.appendChild(saveBtn);
+                actionTd.appendChild(cancelBtn);
+            } else {
+                const editBtn = document.createElement('button');
+                editBtn.type = 'button';
+                editBtn.className = 'btn btn-small';
+                editBtn.textContent = '编辑';
+                editBtn.dataset.action = 'edit';
+                editBtn.dataset.id = row._id;
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.type = 'button';
+                deleteBtn.className = 'btn btn-small btn-danger';
+                deleteBtn.style.marginLeft = '4px';
+                deleteBtn.textContent = '删除';
+                deleteBtn.dataset.action = 'delete';
+                deleteBtn.dataset.id = row._id;
+
+                actionTd.appendChild(editBtn);
+                actionTd.appendChild(deleteBtn);
+            }
+            tr.appendChild(actionTd);
+            tbody.appendChild(tr);
+        }
+
+        function createEditorControl(field, value) {
+            const normalizedValue = value === undefined || value === null ? '' : value;
+            if (field === '开启Affinity') {
+                return createSelectControl(field, normalizedValue, ['', '是', '否']);
+            }
+            if (field === 'Adaptive 3DS') {
+                return createSelectControl(field, normalizedValue, ['', '否', '部分开启']);
+            }
+            if (field === 'Network Tokenized？') {
+                return createSelectControl(field, normalizedValue, ['', 'TRUE', 'False']);
+            }
+            const input = document.createElement('input');
+            input.type = ['Adyen','Stripe','Airwallex'].includes(field) ? 'number' : 'text';
+            if (input.type === 'number') {
+                input.min = 0;
+                input.max = 100;
+                input.step = '1';
+                input.value = normalizedValue === '无分量' ? '' : normalizedValue;
+            } else {
+                input.value = normalizedValue;
+            }
+            input.className = 'edit-input';
+            input.dataset.field = field;
+            return input;
+        }
+
+        function createSelectControl(field, currentValue, options) {
+            const select = document.createElement('select');
+            select.className = 'edit-select';
+            select.dataset.field = field;
+            options.forEach(opt => {
+                const option = document.createElement('option');
+                option.value = opt;
+                option.textContent = opt === '' ? '空' : opt;
+                if (opt === currentValue) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+            });
+            return select;
+        }
+
+        function handleTableClick(event) {
+            const action = event.target.dataset.action;
+            if (!action) return;
+            const rowId = event.target.dataset.id;
+            const rowElement = event.target.closest('tr');
+
+            if (action === 'edit') {
+                startEditRow(rowId);
+            } else if (action === 'delete') {
+                deleteRow(rowId);
+            } else if (action === 'save') {
+                saveRow(rowId, rowElement);
+            } else if (action === 'cancel') {
+                cancelEditRow();
+            }
+        }
+
+        function startEditRow(rowId) {
+            editingRowId = rowId;
+            renderSplitsFromCSV(null, { skipSave: true });
+        }
+
+        function cancelEditRow() {
+            editingRowId = null;
+            renderSplitsFromCSV(null, { skipSave: true });
+        }
+
+        function deleteRow(rowId) {
+            if (!rowId) return;
+            const target = allCSVRows.find(row => row._id === rowId);
+            if (!target) return;
+            if (originalJsonIsTable) {
+                const idx = originalJsonRowIdMap.indexOf(rowId);
+                if (idx !== -1) {
+                    removedOriginalRowIds.add(rowId);
+                }
+            }
+            allCSVRows = allCSVRows.filter(row => row._id !== rowId);
+            if (editingRowId === rowId) {
+                editingRowId = null;
+            }
+            renderSplitsFromCSV(null, { skipSave: true });
+        }
+
+        function addNewRow() {
+            const newRow = {
+                _id: generateRowId(),
+                '支付方式': '',
+                'Network': '',
+                '币种': '',
+                '开启Affinity': '',
+                'Adaptive 3DS': '',
+                '备注': '',
+                'Network Tokenized？': '',
+                'Adyen': '',
+                'Stripe': '',
+                'Airwallex': ''
+            };
+            allCSVRows.push(newRow);
+            editingRowId = newRow._id;
+            renderSplitsFromCSV(null, { skipSave: true });
+        }
+
+        function saveRow(rowId, rowElement) {
+            if (!rowId || !rowElement) return;
+            const targetRow = allCSVRows.find(row => row._id === rowId);
+            if (!targetRow) return;
+
+            const controls = rowElement.querySelectorAll('[data-field]');
+            controls.forEach(control => {
+                const field = control.dataset.field;
+                let value = control.value;
+                if (['Adyen','Stripe','Airwallex'].includes(field)) {
+                    if (value === '' || value === null) {
+                        targetRow[field] = '';
+                    } else {
+                        targetRow[field] = Number(value);
+                    }
+                } else {
+                    targetRow[field] = value;
+                }
+            });
+
+            editingRowId = null;
+            renderSplitsFromCSV(null, { skipSave: true });
+        }
+
+        function exportJSON() {
+            if (!allCSVRows.length) {
+                alert('暂无可导出的数据');
+                return;
+            }
+            const idToRow = new Map();
+            allCSVRows.forEach(row => {
+                idToRow.set(row._id, cloneRow(row));
+            });
+            let exportPayload;
+            if (originalJsonIsTable && Array.isArray(originalUploadedJson)) {
+                const merged = [];
+                originalJsonRowIdMap.forEach((rowId, idx) => {
+                    if (removedOriginalRowIds.has(rowId)) {
+                        return;
+                    }
+                    const originalItem = originalUploadedJson[idx] ? { ...originalUploadedJson[idx] } : {};
+                    if (rowId && idToRow.has(rowId)) {
+                        merged.push({
+                            ...originalItem,
+                            ...idToRow.get(rowId)
+                        });
+                        idToRow.delete(rowId);
+                    } else {
+                        merged.push(originalItem);
+                    }
+                });
+                idToRow.forEach(row => {
+                    merged.push({ ...row });
+                });
+                exportPayload = merged;
+            } else {
+                exportPayload = Array.from(idToRow.values()).map(row => ({ ...row }));
+            }
+
+            const filename = (uploadedFileName && uploadedFileName.endsWith('.json')) ? uploadedFileName : (uploadedFileName ? `${uploadedFileName}.json` : 'workflow_table.json');
+            const jsonText = JSON.stringify(exportPayload, null, 2);
+            const blob = new Blob([jsonText], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function formatCellValue(field, value) {
+            if (value === null || value === undefined) return '';
+            if (['Adyen','Stripe','Airwallex'].includes(field)) {
+                if (value === '' || value === '无分量') {
+                    return value || '';
+                }
+                return `${value}%`;
+            }
+            return String(value);
+        }
+
+        function getSerializableRows() {
+            return allCSVRows.map(row => cloneRow(row));
         }
 
         function renderSplits(splits) {
@@ -1080,382 +1110,215 @@ JPY - 20%：20%：60%"></textarea>
             container.innerHTML = '';
             container.style.display = 'block';
 
-            if (splits.length === 0) {
+            if (!splits || splits.length === 0) {
                 container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔀</div><p>未找到Split节点</p></div>';
                 return;
             }
 
-            splits.forEach((split, index) => {
-                const card = document.createElement('div');
-                card.className = 'split-card';
-                
-                // 条件标签
-                const conditionName = split.condition ? split.condition.name : '无条件';
-                const hasCondition = split.condition && split.condition.name !== '无';
-                
-                card.innerHTML = `
-                    <div class="split-condition ${hasCondition ? '' : 'none'}">
-                        ${escapeHtml(conditionName)}
-                    </div>
-                    <div class="split-routes">
-                        ${split.routes.map(route => `
-                            <div class="route-item">
-                                <div class="route-name">${escapeHtml(route.name)}</div>
-                                <div class="route-bar">
-                                    <div class="route-fill" style="width: ${route.percentage}%;">
-                                        ${route.percentage >= 10 ? route.percentage + '%' : ''}
-                                    </div>
-                                </div>
-                                <div class="route-percentage">${route.percentage}%</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-                
-                container.appendChild(card);
-            });
-        }
+            const csvData = convertSplitsToCSVFormat(splits);
+            const tableContainer = document.createElement('div');
+            tableContainer.style.cssText = 'background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow-x: auto;';
 
-        function switchTab(tabName) {
-            // 切换选项卡样式
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
+            const table = document.createElement('table');
+            table.style.cssText = 'width: 100%; border-collapse: collapse; font-size: 14px;';
 
-            if (tabName === 'nodes') {
-                document.querySelectorAll('.tab')[0].classList.add('active');
-                document.getElementById('nodesTab').classList.add('active');
-            } else if (tabName === 'splits') {
-                document.querySelectorAll('.tab')[1].classList.add('active');
-                document.getElementById('splitsTab').classList.add('active');
-            } else if (tabName === 'compare') {
-                document.querySelectorAll('.tab')[2].classList.add('active');
-                document.getElementById('compareTab').classList.add('active');
-            }
-        }
-
-        async function compareSplits() {
-            const adjustmentText = document.getElementById('adjustmentText').value.trim();
-            if (!adjustmentText) {
-                alert('请输入调整方案文本');
-                return;
-            }
-
-            // 获取调整模式
-            const adjustmentMode = document.querySelector('input[name="adjustmentMode"]:checked').value;
-
-            // 使用已上传的文件或重新获取
-            const fileInput = document.getElementById('fileInput');
-            let fileToUse = uploadedFile;
-            
-            if (!fileToUse && fileInput.files && fileInput.files.length > 0) {
-                fileToUse = fileInput.files[0];
-            }
-            
-            if (!fileToUse) {
-                alert('请先上传workflow JSON文件');
-                return;
-            }
-
-            const resultDiv = document.getElementById('compareResult');
-            const fullComparisonDiv = document.getElementById('fullComparison');
-            resultDiv.style.display = 'block';
-            fullComparisonDiv.style.display = 'none';
-            resultDiv.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>正在对比配置...</p></div>';
-
-            try {
-                const formData = new FormData();
-                formData.append('file', fileToUse);
-                formData.append('adjustment_text', adjustmentText);
-                formData.append('adjustment_mode', adjustmentMode);
-
-                const response = await fetch('/api/compare-split', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    renderCompareResult(result.data);
-                    renderFullComparison(result.data);
-                } else {
-                    throw new Error(result.error || '对比失败');
-                }
-            } catch (error) {
-                resultDiv.innerHTML = `<div class="error-message">对比失败: ${error.message}</div>`;
-            }
-        }
-
-        function renderCompareResult(data, resultDivId = 'compareResult') {
-            const resultDiv = document.getElementById(resultDivId);
-            
-            let html = '';
-
-            // 按支付方式和操作类型分组
-            const changesByMethod = {};
-            if (data.changes && data.changes.length > 0) {
-                data.changes.forEach(change => {
-                    const method = change.payment_method || 'UNKNOWN';
-                    if (!changesByMethod[method]) {
-                        changesByMethod[method] = {
-                            add: [],
-                            remove: [],
-                            modify: []
-                        };
-                    }
-                    if (change.action && changesByMethod[method][change.action]) {
-                        changesByMethod[method][change.action].push(change);
-                    }
-                });
-            }
-
-            // 遍历每个支付方式
-            Object.keys(changesByMethod).forEach(paymentMethod => {
-                const changes = changesByMethod[paymentMethod];
-                // 将UNKNOWN显示为"其他币种"
-                const displayPaymentMethod = paymentMethod === "UNKNOWN" ? "其他币种" : paymentMethod;
-                
-                html += `<div class="change-item" style="margin-bottom: 15px;">`;
-                html += `<div class="change-title" style="font-size: 16px; margin-bottom: 10px; color: #2c3e50;">${displayPaymentMethod}</div>`;
-                
-                // 显示需要删除的币种（一行展示多个）
-                if (changes.remove && changes.remove.length > 0) {
-                    html += `<div style="margin-bottom: 12px; padding: 10px; background: #fee; border-radius: 4px; border-left: 3px solid #e74c3c;">`;
-                    html += `<div style="font-weight: bold; color: #721c24; margin-bottom: 6px; font-size: 13px;">➖ 需要删除的币种：</div>`;
-                    html += `<div style="display: flex; flex-wrap: wrap; gap: 6px;">`;
-                    changes.remove.forEach(change => {
-                        const displayCurrency = change.currency === "UNKNOWN" ? "其他币种" : change.currency;
-                        html += `<span style="padding: 4px 10px; background: #f8d7da; color: #721c24; border-radius: 4px; font-size: 13px; font-weight: 500;">${displayCurrency}</span>`;
-                    });
-                    html += `</div>`;
-                    html += `</div>`;
-                }
-
-                // 显示需要增加的币种（一行展示多个，带分量信息）
-                if (changes.add && changes.add.length > 0) {
-                    html += `<div style="margin-bottom: 12px; padding: 10px; background: #d4edda; border-radius: 4px; border-left: 3px solid #27ae60;">`;
-                    html += `<div style="font-weight: bold; color: #155724; margin-bottom: 6px; font-size: 13px;">➕ 需要增加的币种：</div>`;
-                    html += `<div style="display: flex; flex-wrap: wrap; gap: 8px;">`;
-                    changes.add.forEach(change => {
-                        const percentages = change.new.percentages || [];
-                        const displayCurrency = change.currency === "UNKNOWN" ? "其他币种" : change.currency;
-                        html += `<div style="padding: 6px 10px; background: white; border-radius: 4px; border: 1px solid #c3e6cb;">`;
-                        html += `<div style="font-weight: bold; color: #155724; font-size: 13px; margin-bottom: 3px;">${displayCurrency}</div>`;
-                        html += `<div style="font-size: 12px; color: #155724;">`;
-                        html += `<span style="margin-right: 4px;">Adyen ${percentages[0] || 0}%</span>`;
-                        html += `<span style="margin-right: 4px;">Stripe ${percentages[1] || 0}%</span>`;
-                        html += `<span>AWX ${percentages[2] || 0}%</span>`;
-                        html += `</div>`;
-                        html += `</div>`;
-                    });
-                    html += `</div>`;
-                    html += `</div>`;
-                }
-
-                // 显示需要修改的币种（单独展示，显示原来的和现在的分量）
-                if (changes.modify && changes.modify.length > 0) {
-                    html += `<div style="margin-bottom: 12px;">`;
-                    html += `<div style="font-weight: bold; color: #856404; margin-bottom: 8px; font-size: 13px;">✏️ 需要修改的币种：</div>`;
-                    changes.modify.forEach(change => {
-                        const oldPct = change.current.percentages || [];
-                        const newPct = change.new.percentages || [];
-                        const displayCurrency = change.currency === "UNKNOWN" ? "其他币种" : change.currency;
-                        html += `<div style="margin-bottom: 8px; padding: 8px; background: #fff3cd; border-radius: 4px; border-left: 3px solid #f39c12;">`;
-                        html += `<div style="font-weight: bold; color: #856404; margin-bottom: 6px; font-size: 13px;">${displayCurrency}</div>`;
-                        
-                        // 原来的分量
-                        html += `<div class="change-row">`;
-                        html += `<div class="change-label">原来:</div>`;
-                        html += `<div class="change-value">`;
-                        html += `<span class="change-percentage" style="background: #fff3cd;">Adyen ${oldPct[0] || 0}%</span>`;
-                        html += `<span class="change-percentage" style="background: #fff3cd;">Stripe ${oldPct[1] || 0}%</span>`;
-                        html += `<span class="change-percentage" style="background: #fff3cd;">AWX ${oldPct[2] || 0}%</span>`;
-                        html += `</div>`;
-                        html += `</div>`;
-                        
-                        // 现在的分量
-                        html += `<div class="change-row">`;
-                        html += `<div class="change-label">现在:</div>`;
-                        html += `<div class="change-value">`;
-                        html += `<span class="change-percentage" style="background: #d4edda;">Adyen ${newPct[0] || 0}%</span>`;
-                        html += `<span class="change-percentage" style="background: #d4edda;">Stripe ${newPct[1] || 0}%</span>`;
-                        html += `<span class="change-percentage" style="background: #d4edda;">AWX ${newPct[2] || 0}%</span>`;
-                        html += `</div>`;
-                        html += `</div>`;
-                        
-                        html += `</div>`;
-                    });
-                    html += `</div>`;
-                }
-                
-                html += `</div>`;
-            });
-
-            // 显示需要合并的币种
-            const summary = data.summary || {};
-            if (summary.currencies_to_merge && summary.currencies_to_merge.length > 0) {
-                html += `<div class="change-item modify" style="margin-top: 15px;">`;
-                html += `<div class="change-title" style="font-size: 16px; margin-bottom: 10px;">🔗 需要合并的币种</div>`;
-                
-                summary.currencies_to_merge.forEach(merge => {
-                    html += `<div style="margin-bottom: 8px; padding: 8px; background: #fff3cd; border-radius: 4px;">`;
-                    html += `<div style="font-weight: bold; margin-bottom: 5px;">${merge.payment_method} - ${merge.currencies.join('/')}</div>`;
-                    html += `<div style="font-size: 13px;">`;
-                    html += `<span class="change-percentage" style="background: #fff3cd;">Adyen ${merge.percentages[0]}%</span>`;
-                    html += `<span class="change-percentage" style="background: #fff3cd;">Stripe ${merge.percentages[1]}%</span>`;
-                    html += `<span class="change-percentage" style="background: #fff3cd;">AWX ${merge.percentages[2]}%</span>`;
-                    html += `</div>`;
-                    html += `<div style="font-size: 12px; color: #856404; margin-top: 5px;">需要将 ${merge.currencies.join('、')} 合并为同一个split配置</div>`;
-                    html += `</div>`;
-                });
-                
-                html += `</div>`;
-            }
-
-            resultDiv.innerHTML = html || '<div style="padding: 20px; text-align: center; color: #7f8c8d;">未发现需要调整的配置</div>';
-        }
-
-        function renderFullComparison(data, fullComparisonDivId = 'fullComparison') {
-            const fullComparisonDiv = document.getElementById(fullComparisonDivId);
-            
-            if (!data.full_comparison) {
-                fullComparisonDiv.style.display = 'none';
-                return;
-            }
-
-            const before = data.full_comparison.before || {};
-            const after = data.full_comparison.after || {};
-            
-            // 获取所有支付方式
-            const allPaymentMethods = new Set([
-                ...Object.keys(before),
-                ...Object.keys(after)
-            ]);
-
-            if (allPaymentMethods.size === 0) {
-                fullComparisonDiv.style.display = 'none';
-                return;
-            }
-
-            fullComparisonDiv.style.display = 'block';
-            
-            let html = '<div class="change-item" style="margin-top: 20px;">';
-            html += '<div class="change-title" style="font-size: 16px; margin-bottom: 10px; color: #2c3e50;">📊 完整分量对比</div>';
-            html += '<table class="comparison-table">';
-            html += '<thead>';
-            html += '<tr>';
-            html += '<th style="width: 150px;">支付方式</th>';
-            html += '<th style="width: 100px;">币种</th>';
-            html += '<th style="width: 200px;">之前的分量</th>';
-            html += '<th style="width: 200px;">现在的分量</th>';
-            html += '</tr>';
-            html += '</thead>';
-            html += '<tbody>';
-
-            // 按支付方式排序
-            const sortedPaymentMethods = Array.from(allPaymentMethods).sort();
-            
-            sortedPaymentMethods.forEach(paymentMethod => {
-                const beforeCurrencies = before[paymentMethod] || {};
-                const afterCurrencies = after[paymentMethod] || {};
-                const allCurrencies = new Set([
-                    ...Object.keys(beforeCurrencies),
-                    ...Object.keys(afterCurrencies)
-                ]);
-
-                if (allCurrencies.size === 0) return;
-
-                // 支付方式标题行
-                html += `<tr class="comparison-payment-header">`;
-                html += `<td colspan="4">${paymentMethod}</td>`;
-                html += `</tr>`;
-
-                // 按币种排序
-                const sortedCurrencies = Array.from(allCurrencies).sort();
-                
-                sortedCurrencies.forEach(currency => {
-                    const beforePct = beforeCurrencies[currency] || [];
-                    const afterPct = afterCurrencies[currency] || [];
-                    
-                    html += '<tr>';
-                    html += '<td></td>'; // 支付方式列留空
-                    html += `<td class="comparison-currency">${currency}</td>`;
-                    
-                    // 之前的分量
-                    html += '<td>';
-                    if (beforePct.length > 0) {
-                        html += '<div class="comparison-percentages">';
-                        html += `<span class="comparison-percentage-item adyen">Adyen ${beforePct[0] || 0}%</span>`;
-                        html += `<span class="comparison-percentage-item stripe">Stripe ${beforePct[1] || 0}%</span>`;
-                        html += `<span class="comparison-percentage-item awx">AWX ${beforePct[2] || 0}%</span>`;
-                        html += '</div>';
-                    } else {
-                        html += '<span style="color: #95a5a6;">-</span>';
-                    }
-                    html += '</td>';
-                    
-                    // 现在的分量
-                    html += '<td>';
-                    if (afterPct.length > 0) {
-                        html += '<div class="comparison-percentages">';
-                        html += `<span class="comparison-percentage-item adyen">Adyen ${afterPct[0] || 0}%</span>`;
-                        html += `<span class="comparison-percentage-item stripe">Stripe ${afterPct[1] || 0}%</span>`;
-                        html += `<span class="comparison-percentage-item awx">AWX ${afterPct[2] || 0}%</span>`;
-                        html += '</div>';
-                    } else {
-                        html += '<span style="color: #95a5a6;">-</span>';
-                    }
-                    html += '</td>';
-                    
-                    html += '</tr>';
-                });
-            });
-
-            html += '</tbody>';
-            html += '</table>';
-            html += '</div>';
-
-            fullComparisonDiv.innerHTML = html;
-        }
-
-        function showNodeDetails(node) {
-            const modal = document.getElementById('nodeModal');
-            const body = document.getElementById('modalBody');
-            
-            body.innerHTML = `
-                <div class="detail-section">
-                    <div class="detail-label">名称:</div>
-                    <div class="detail-value">${escapeHtml(node.name)}</div>
-                </div>
-                <div class="detail-section">
-                    <div class="detail-label">ID:</div>
-                    <div class="detail-value">${escapeHtml(node.id)}</div>
-                </div>
-                <div class="detail-section">
-                    <div class="detail-label">类型:</div>
-                    <div class="detail-value">${escapeHtml(node.type)}</div>
-                </div>
-                ${node.description ? `
-                <div class="detail-section">
-                    <div class="detail-label">描述:</div>
-                    <div class="detail-value">${escapeHtml(node.description)}</div>
-                </div>
-                ` : ''}
-                <div class="detail-section">
-                    <div class="detail-label">原始数据:</div>
-                    <div class="detail-value">${escapeHtml(JSON.stringify(node.data, null, 2))}</div>
-                </div>
+            const thead = document.createElement('thead');
+            thead.innerHTML = `
+                <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                    <th style="padding: 12px; text-align: left; font-weight: bold; color: #2c3e50; border-bottom: 2px solid #dee2e6;">支付方式</th>
+                    <th style="padding: 12px; text-align: left; font-weight: bold; color: #2c3e50; border-bottom: 2px solid #dee2e6;">币种</th>
+                    <th style="padding: 12px; text-align: center; font-weight: bold; color: #2c3e50; border-bottom: 2px solid #dee2e6;">Adyen</th>
+                    <th style="padding: 12px; text-align: center; font-weight: bold; color: #2c3e50; border-bottom: 2px solid #dee2e6;">Stripe</th>
+                    <th style="padding: 12px; text-align: center; font-weight: bold; color: #2c3e50; border-bottom: 2px solid #dee2e6;">Airwallex</th>
+                </tr>
             `;
-            
-            modal.style.display = 'block';
+            table.appendChild(thead);
+
+            const tbody = document.createElement('tbody');
+            const paymentMethods = ['CARD', 'AP', 'GP'];
+            paymentMethods.forEach(paymentMethod => {
+                if (!csvData[paymentMethod] || Object.keys(csvData[paymentMethod]).length === 0) {
+                    return;
+                }
+
+                const methodRow = document.createElement('tr');
+                methodRow.style.cssText = 'background: #e9ecef;';
+                methodRow.innerHTML = `
+                    <td colspan="5" style="padding: 10px 12px; font-weight: bold; color: #2c3e50; font-size: 16px;">
+                        ${getPaymentMethodDisplayName(paymentMethod)}
+                    </td>
+                `;
+                tbody.appendChild(methodRow);
+
+                Object.keys(csvData[paymentMethod]).sort().forEach(currency => {
+                    const percentages = csvData[paymentMethod][currency];
+                    const [adyen, stripe, airwallex] = percentages;
+
+                    const row = document.createElement('tr');
+                    row.style.cssText = 'border-bottom: 1px solid #dee2e6;';
+                    row.innerHTML = `
+                        <td style="padding: 10px 12px; color: #495057;">${getPaymentMethodCSVName(paymentMethod)}</td>
+                        <td style="padding: 10px 12px; color: #495057; font-weight: 500;">${escapeHtml(currency)}</td>
+                        <td style="padding: 10px 12px; text-align: center; color: #495057;">${adyen}%</td>
+                        <td style="padding: 10px 12px; text-align: center; color: #495057;">${stripe}%</td>
+                        <td style="padding: 10px 12px; text-align: center; color: #495057;">${airwallex}%</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            });
+
+            Object.keys(csvData).forEach(paymentMethod => {
+                if (paymentMethods.includes(paymentMethod)) {
+                    return;
+                }
+                const methodRow = document.createElement('tr');
+                methodRow.style.cssText = 'background: #e9ecef;';
+                methodRow.innerHTML = `
+                    <td colspan="5" style="padding: 10px 12px; font-weight: bold; color: #2c3e50; font-size: 16px;">
+                        ${paymentMethod}
+                    </td>
+                `;
+                tbody.appendChild(methodRow);
+
+                Object.keys(csvData[paymentMethod]).sort().forEach(currency => {
+                    const percentages = csvData[paymentMethod][currency];
+                    const [adyen, stripe, airwallex] = percentages;
+
+                    const row = document.createElement('tr');
+                    row.style.cssText = 'border-bottom: 1px solid #dee2e6;';
+                    row.innerHTML = `
+                        <td style="padding: 10px 12px; color: #495057;">${paymentMethod}</td>
+                        <td style="padding: 10px 12px; color: #495057; font-weight: 500;">${escapeHtml(currency)}</td>
+                        <td style="padding: 10px 12px; text-align: center; color: #495057;">${adyen}%</td>
+                        <td style="padding: 10px 12px; text-align: center; color: #495057;">${stripe}%</td>
+                        <td style="padding: 10px 12px; text-align: center; color: #495057;">${airwallex}%</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            });
+
+            table.appendChild(tbody);
+            tableContainer.appendChild(table);
+            container.appendChild(tableContainer);
         }
 
-        function closeModal() {
-            document.getElementById('nodeModal').style.display = 'none';
+        // 将split数据转换为CSV格式：{支付方式: {币种: [Adyen%, Stripe%, Airwallex%]}}
+        function convertSplitsToCSVFormat(splits) {
+            const csvData = {};
+            
+            splits.forEach(split => {
+                // 获取支付方式和币种
+                let paymentMethod = split.payment_method || 'UNKNOWN';
+                let currency = split.currency || '其他';
+                
+                // 如果后端没有提供，尝试从条件中提取
+                if (paymentMethod === 'UNKNOWN' || currency === '其他') {
+                    const condition = split.condition;
+                    if (condition && condition.expression) {
+                        const expr = condition.expression.toLowerCase();
+                        
+                        if (paymentMethod === 'UNKNOWN') {
+                            if (expr.includes('card') || expr.includes('cARD')) {
+                                paymentMethod = 'CARD';
+                            } else if (expr.includes('apple') || expr.includes('ap')) {
+                                paymentMethod = 'AP';
+                            } else if (expr.includes('google') || expr.includes('gp')) {
+                                paymentMethod = 'GP';
+                            }
+                        }
+                        
+                        if (currency === '其他') {
+                            const currencyPatterns = [
+                                /currency[:\s]*["']?([a-z]{3})["']?/i,
+                                /币种[:\s]*["']?([^"'\s]+)["']?/i,
+                                /["']([a-z]{3})["']/i
+                            ];
+                            
+                            for (const pattern of currencyPatterns) {
+                                const match = expr.match(pattern);
+                                if (match && match[1]) {
+                                    currency = match[1].toUpperCase();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    
+                    // 如果仍然无法提取，尝试从split名称提取
+                    if (paymentMethod === 'UNKNOWN') {
+                        const splitName = (split.name || '').toLowerCase();
+                        if (splitName.includes('card')) paymentMethod = 'CARD';
+                        else if (splitName.includes('apple') || splitName.includes('ap')) paymentMethod = 'AP';
+                        else if (splitName.includes('google') || splitName.includes('gp')) paymentMethod = 'GP';
+                    }
+                }
+                
+                // 从routes中提取分量（通常routes对应Adyen, Stripe, Airwallex）
+                // 假设routes的顺序是：Adyen, Stripe, Airwallex
+                const routes = split.routes || [];
+                let adyen = 0, stripe = 0, airwallex = 0;
+                
+                // 尝试从route名称匹配
+                routes.forEach(route => {
+                    const routeName = (route.name || '').toLowerCase();
+                    const percentage = route.percentage || 0;
+                    
+                    if (routeName.includes('adyen') || routeName.includes('ady')) {
+                        adyen = percentage;
+                    } else if (routeName.includes('stripe') || routeName.includes('str')) {
+                        stripe = percentage;
+                    } else if (routeName.includes('airwallex') || routeName.includes('awx') || routeName.includes('air')) {
+                        airwallex = percentage;
+                    }
+                });
+                
+                // 如果无法从名称匹配，按顺序分配（假设前三个route分别是Adyen, Stripe, Airwallex）
+                if (adyen === 0 && stripe === 0 && airwallex === 0 && routes.length >= 3) {
+                    adyen = routes[0].percentage || 0;
+                    stripe = routes[1].percentage || 0;
+                    airwallex = routes[2].percentage || 0;
+                } else if (routes.length === 3) {
+                    // 如果只有3个routes，按顺序分配
+                    adyen = routes[0].percentage || 0;
+                    stripe = routes[1].percentage || 0;
+                    airwallex = routes[2].percentage || 0;
+                }
+                
+                // 合并相同支付方式和币种的分量（取平均值或第一个）
+                if (!csvData[paymentMethod]) {
+                    csvData[paymentMethod] = {};
+                }
+                
+                if (!csvData[paymentMethod][currency]) {
+                    csvData[paymentMethod][currency] = [adyen, stripe, airwallex];
+                    } else {
+                    // 如果已存在，合并分量（这里简单取第一个，也可以取平均值）
+                    // csvData[paymentMethod][currency] = [adyen, stripe, airwallex];
+                }
+            });
+            
+            return csvData;
+        }
+        
+        // 获取支付方式CSV显示名称
+        function getPaymentMethodCSVName(method) {
+            const names = {
+                'CARD': 'Card',
+                'AP': 'Apple Pay',
+                'GP': 'Google Pay'
+            };
+            return names[method] || method;
+        }
+        
+        // 获取支付方式显示名称
+        function getPaymentMethodDisplayName(method) {
+            const names = {
+                'CARD': '💳 Card',
+                'AP': '🍎 Apple Pay',
+                'GP': '📱 Google Pay',
+                'UNKNOWN': '❓ 未知支付方式'
+            };
+            return names[method] || method;
         }
 
         function escapeHtml(text) {
@@ -1467,63 +1330,6 @@ JPY - 20%：20%：60%"></textarea>
                 "'": '&#039;'
             };
             return text.replace(/[&<>"']/g, m => map[m]);
-        }
-
-        // 点击模态框外部关闭
-        window.addEventListener('click', (e) => {
-            const modal = document.getElementById('nodeModal');
-            if (e.target === modal) {
-                closeModal();
-            }
-        });
-
-        async function compareDocSplits() {
-            const adjustmentText = document.getElementById('docAdjustmentText').value.trim();
-            if (!adjustmentText) {
-                alert('请输入调整方案文本');
-                return;
-            }
-
-            // 获取调整模式
-            const adjustmentMode = document.querySelector('input[name="docAdjustmentMode"]:checked').value;
-
-            const resultDiv = document.getElementById('docCompareResult');
-            const fullComparisonDiv = document.getElementById('docFullComparison');
-            resultDiv.style.display = 'block';
-            fullComparisonDiv.style.display = 'none';
-            resultDiv.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>正在读取文档并对比配置...</p></div>';
-
-            try {
-                const formData = new FormData();
-                formData.append('adjustment_text', adjustmentText);
-                formData.append('adjustment_mode', adjustmentMode);
-
-                const response = await fetch('/api/compare-doc-split', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    renderDocCompareResult(result.data);
-                    renderDocFullComparison(result.data);
-                } else {
-                    throw new Error(result.error || '对比失败');
-                }
-            } catch (error) {
-                resultDiv.innerHTML = `<div class="error-message">对比失败: ${error.message}</div>`;
-            }
-        }
-
-        function renderDocCompareResult(data) {
-            // 复用renderCompareResult的逻辑
-            renderCompareResult(data, 'docCompareResult');
-        }
-
-        function renderDocFullComparison(data) {
-            // 复用renderFullComparison的逻辑
-            renderFullComparison(data, 'docFullComparison');
         }
     </script>
 </body>
