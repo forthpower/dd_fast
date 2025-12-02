@@ -14,22 +14,11 @@ project_root = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, project_root)
 
 # 尝试从项目路径导入，如果失败则尝试打包路径
-try:
-    from feature.schema_generator.schema_generator_manager import SchemaGeneratorManager
-except ImportError:
-    try:
-        from dist.dd_fast._internal.feature.schema_generator.schema_generator_manager import SchemaGeneratorManager
-    except ImportError:
-        # 如果都失败，尝试添加路径后导入
-        import sys
-        if hasattr(sys, '_MEIPASS'):  # PyInstaller打包环境
-            sys.path.insert(0, os.path.join(sys._MEIPASS, 'feature'))
-        from feature.schema_generator.schema_generator_manager import SchemaGeneratorManager
-
 from feature.file_duplicator.file_duplicator_manager import FileDuplicatorManager
 from feature.command_tool.command_tool_manager import CommandToolManager
 from feature.data_script_generator.data_script_generator_manager import DataScriptGeneratorManager
 from feature.workflow.workflow_visualizer_manager import WorkflowVisualizerManager
+from feature.payment_error.payment_error_manager import PaymentErrorManager
 
 
 class DDFastApp(rumps.App):
@@ -40,21 +29,23 @@ class DDFastApp(rumps.App):
         
         # 初始化功能管理器
         self.file_duplicator_manager = FileDuplicatorManager()
-        self.schema_generator_manager = SchemaGeneratorManager()
         self.command_tool_manager = CommandToolManager()
         self.data_script_generator_manager = DataScriptGeneratorManager()
         self.workflow_visualizer_manager = WorkflowVisualizerManager()
+        self.payment_error_manager = PaymentErrorManager()
         
         # 标记服务器是否已启动
         self._server_started = False
         
+        self.payment_error_menu = self._build_payment_error_menu()
+        
         # 设置菜单
         self.menu = [
             "文件复制器",
-            "Schema生成器",
             "命令大全",
             "数据脚本生成器",
             "Workflow可视化",
+            self.payment_error_menu,
             None
         ]
         
@@ -200,17 +191,6 @@ class DDFastApp(rumps.App):
     
         
     
-    @rumps.clicked("Schema生成器")
-    def open_schema_generator(self, _):
-        """打开Schema生成器"""
-        try:
-            print("正在打开Schema生成器...")
-            self.schema_generator_manager.open_feature()
-            print("Schema生成器已打开")
-        except Exception as e:
-            print(f"打开Schema生成器失败: {str(e)}")
-            rumps.alert("错误", f"打开Schema生成器失败: {str(e)}")
-    
     @rumps.clicked("命令大全")
     def open_command_tool(self, _):
         """打开命令大全"""
@@ -247,6 +227,19 @@ class DDFastApp(rumps.App):
             print(error_msg)
             traceback.print_exc()
             rumps.alert("错误", error_msg)
+
+    def _build_payment_error_menu(self) -> rumps.MenuItem:
+        menu = rumps.MenuItem("支付错误排查")
+        menu.add(rumps.MenuItem("充值与被充值FPID不一致", callback=self.open_payment_error_tool))
+        return menu
+
+    def open_payment_error_tool(self, _):
+        """打开支付错误排查工具"""
+        try:
+            print("正在打开支付错误排查工具 -> 充值与被充值FPID不一致")
+            self.payment_error_manager.open_feature()
+        except Exception as e:
+            rumps.alert("错误", f"打开支付错误排查工具失败: {str(e)}")
 
 
 def main():

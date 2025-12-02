@@ -1,0 +1,112 @@
+[
+  {
+    "domain": ".tradingview.com",
+    "expiry": 1799038804,
+    "httpOnly": false,
+    "name": "_sp_id.cf1a",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "e7fe4e75-dee3-4ec1-b206-1dfa46c294e0.1764478802.1.1764478805..b511d58e-8b3c-474b-b8d6-8bb938163eca..06d07039-ff4c-45cb-a3e0-005cdd59a8e5.1764478804796.1"
+  },
+  {
+    "domain": ".tradingview.com",
+    "expiry": 1799038804,
+    "httpOnly": false,
+    "name": "cookiesSettings",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "{\"analytics\":true,\"advertising\":true}"
+  },
+  {
+    "domain": ".tradingview.com",
+    "expiry": 1799038804,
+    "httpOnly": false,
+    "name": "cookiePrivacyPreferenceBannerProduction",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "notApplicable"
+  },
+  {
+    "domain": ".tradingview.com",
+    "expiry": 1772254804,
+    "httpOnly": false,
+    "name": "_sp_ses.cf1a",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "*"
+  },
+  {
+    "domain": ".tradingview.com",
+    "expiry": 1799038800,
+    "httpOnly": false,
+    "name": "cachec",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "undefined"
+  },
+  {
+    "domain": ".tradingview.com",
+    "expiry": 1799038800,
+    "httpOnly": false,
+    "name": "etg",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "undefined"
+  },
+  {
+    "domain": ".tradingview.com",
+    "expiry": 1772514000,
+    "httpOnly": true,
+    "name": "sessionid",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": true,
+    "value": "pvs1w8vodmujovbkslh5emzo87aqjmv0"
+  },
+  {
+    "domain": "www.tradingview.com",
+    "expiry": 1764565200,
+    "httpOnly": true,
+    "name": "MjBxDjGKZ",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": true,
+    "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..h89Rn-4rp8MqaLMF.YviIB1BqRGeEnBKyAwU_2qQwCSNCqNmQGKNKzpVWF97XyRnMQcNuPKFQMOxDPRKZdz3oEsIles3R0hPJ6CSEeLuNMc1jdqXo5lWmuaMXxDoXDmmsOJE_fOvO_6VPnsonRou1RTRdUiFRaK0M3e9nevLIr7bfro9gZtSzBYLrh1gb3kOr9h8a9QSVX7LCm7SHptqvlwpecGYBOg0OnT5xlGGF-qZ2JBglvl7KbF-jAHj9sb2SPXYPLcd3iJTHXUWT6m0kxdOLtayT8DORxRYveLPcHrw-HE_8c0hdm_jHMPt9.r-9InrjqzyVWoINTvZkTyw"
+  },
+  {
+    "domain": ".tradingview.com",
+    "expiry": 1772514000,
+    "httpOnly": true,
+    "name": "sessionid_sign",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": true,
+    "value": "v3:1Sd0oaGODAiwH1bxn73/M/Mu3g6vDAbFcX49PHK97yE="
+  },
+  {
+    "domain": ".tradingview.com",
+    "expiry": 1795582800,
+    "httpOnly": true,
+    "name": "device_t",
+    "path": "/",
+    "sameSite": "None",
+    "secure": true,
+    "value": "UHpOVUFROjE.vIdiuIAhCx0lAHKy6YsbzfuypHrS6cPE4uVcw1D-fwE"
+  },
+  {
+    "domain": "www.tradingview.com",
+    "expiry": 1780030738,
+    "httpOnly": false,
+    "name": "g_state",
+    "path": "/",
+    "sameSite": "Lax",
+    "secure": false,
+    "value": "{\"i_l\":0,\"i_ll\":1764478738288,\"i_b\":\"y7h3c8ChaTvXV/isISt+bVZpC9OxPPmJKN4zTOFjeLY\"}"
+  }
+]
