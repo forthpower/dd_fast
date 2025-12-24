@@ -1,0 +1,22 @@
+[Unit]
+Description=dd_fast Workflow API Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/dd_fast
+Environment="PATH=/usr/bin:/usr/local/bin:/opt/dd_fast/venv/bin"
+ExecStart=/opt/dd_fast/venv/bin/python3 /opt/dd_fast/server.py --host 0.0.0.0 --port 5012
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# 安全设置
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+

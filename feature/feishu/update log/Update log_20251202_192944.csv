@@ -1,0 +1,197 @@
+﻿支付方式,日期,日志内容,修改内容
+Apple Pay,2025/07/17,"Stripe (10%),Airwallex (10%),Adyen (80%)",
+Apple Pay,2025/07/18,"JPY  KRW Adyen(50%),Airwallex (50%)
+TWD CAD EUR SAR SGD GBP AUD HKD AED Stripe(33%)  Airwallex(33%)  Airwallex (34%)",
+Apple Pay,2025/07/23,"USD 给 Airwallex 10%
+现状是 Airwallex 10%,Adyen 90%",
+Apple Pay,2025/07/25,"1、TWD PHP IDR CAD EUR AUD SAR 新增量切换成 Adyen 20%,Stripe 80%,2、Stripe 的订单 10% 使用 Primer 3DS,90% 使用 Processor 3DS,3、Airwallex 支付失败的订单 Fallback 到 Adyen",
+Apple Pay,2025/07/29,"修改USD 订单分配 Adyen 60%,Stripe 20%,AWX 20%",
+Apple Pay,2025/07/31,"Stripe 的订单 50% 使用 Primer 3DS,50% 使用 Processor 3DS",
+Apple Pay,2025/08/08,"Amex 修改：
+USD币种：Adyen:AWX - 50%:50%
+JPY/KRW ：AWX 100%
+其他： Stripe:AWX - 50%:50%",
+Apple Pay,2025/08/12,"Amex 修改（Not Network Tokenised）：
+USD币种：Adyen:AWX - 50%:50%
+JPY/KRW ：AWX 100%
+其他： Stripe: 100%",
+Apple Pay,2025/08/21,"1. 开启GP/AP的Affinity功能,2. 将PSP-Stripe的3DS全量切换至Primer 3DS,3. 苹果Pay的分量策略调整为下列方案：
+1. USD/EUR/SAR/AUD- Adyen:Stripe:AWX=10%:60%:30%,2. KRW/JPY/CAD- Adyen:Stripe:AWX=10%:30%:60%,3. 其他币种- Adyen:Stripe:AWX=20%:40%:40%,4. Fallback 配置
+1. Adyen 的 Fallback 配置成 Stripe
+2. Stripe 的 Fallback 配置成 Adyen
+3. Airwallex 的 Fallback 配置成",
+Apple Pay,2025/08/31,"Apple：
+KRW/JPY- Adyen:Stripe:AWX=10%:20%:70%
+CAD/TWD/TRY- Adyen:Stripe:AWX=10%:60%:30%",
+Apple Pay,2025/09/09,"分量排序皆为Adyen:Stripe:AWX
+【AP】
+TWD/CAD - 15%:70%:15%,SAR - 20%:40%:40%",
+Apple Pay,2025/09/12,"Adyen USD币种Affinity用户分流
+AP- 30%/50%/20%(Adyen/Stripe/AWX)
+GP- 20%/60%/20%(Adyen/Stripe/AWX)",
+Apple Pay,2025/09/16,"【AP】
+USD/TRY- 20%:40%:40%,SAR - 15%:70%:15%",
+Apple Pay,2025/09/19,"分量排序皆为Adyen:Stripe:AWX
+【AP】
+USD- 40%/30%/30%",
+Apple Pay,2025/09/23,关闭 Adyen Affinity 交易分流,
+Apple Pay,2025/10/22,"分量排序皆为Adyen:Stripe:AWX
+【AP】
+EUR - 20%：60%：20%
+AUD - 30%：40%：30%",
+Apple Pay,2025/10/29,"分量排序皆为Adyen:Stripe:AWX
+【AP】
+SAR - 20%：60%：20%",
+Apple Pay,2025/11/04,"*从左至右为Adyen:Stripe:AWX
+【AP】
+JPY - 20%：20%：60%
+PLN - 40%：20%：40%",
+Apple Pay,2025/11/11,"USD - 20%：40%：40%
+TWD - 40%：30%：30%
+EUR - 20%：40%：40%
+KRW - 40%：20%：40%
+其他币种 - 30%：40%：30%",
+Card,2025/05/14,"Stripe 开始上线,开 SGD 开始测试",
+Card,2025/05/15,"11:56 Stripe 加开 TWD KRW JPY EUR SAR AED
+13:28 发现 Stripe 在 JPY 的问题,JPY 订单切换回 Adyen
+18:41 KRW 切换回 Adyen",
+Card,2025/05/16,"Amex 支付,如果不在 Adyen 支持的币种范围内,直接走 Stripe
+Discover 支付都有 Adyen 结算
+TWD/SAR/AED/SGD Adyen 和 Stripe 各 50%
+EUR 分 10% 给 Stripe,90% 给 Adyen",
+Card,2025/05/19,EUR Adyen 和 Stripe 各 50%,
+Card,2025/05/21,"Affinity 上线,使用 JPY 进行灰度,即有上次支付成功 PSP 的标识就使用上次的PSP,如果没有则各50%",
+Card,2025/05/28,"AED SAR SGD TWD EUR 币种,在 50:50 的基础上开启Affinity功能
+剩余币种的 AB测试。除 USD 为 90:10 外,其余币种为 50:50
+JPY KRW 币种由于 Stripe 渠道在 3DS 层面存在一些问题,量级全部转回 Adyen执行,也关闭 JPY 正在运作的 Affinity,KRW Amex 支付使用Stripe ( Adyen 不支持 KRW 地区 Amex 支付)",
+Card,2025/06/04,将 Stripe 的卡自然量支付 USD 币种提量到 30%,
+Card,2025/06/06,"在 Affinity 基础上,所有自然量 Amex 交易都由 Stripe 处理
+关闭 GPay、APay 的预付卡支付",
+Card,2025/06/28,"由于 Stripe 仅支持 Visa、MasterCard、American Express、UnionPay or JCB,只把这几种卡的订单给到Stripe",
+Card,2025/07/11,issuer country code 为 US/CA/MX/AU  + Adyen + 非 Amex 卡 开启 50% Adaptive 3DS,
+Card,2025/07/16,"Discover,自然量 (没有 Affinity 标识) 的订单 Airwallex 和 Adyen 各 50%
+TWD CAD EUR SAR SGD GBP AUD HKD AED 币种自然量订单 Adyen(34%),Stripe(33%),Airwallex(33%)
+JPY  KRW  币种自然量订单 Adyen(50%),Airwallex(50%)",
+Card,2025/07/25,"1、TWD PHP IDR CAD EUR AUD SAR 新增量切换成 Adyen 20%,Stripe 80%,2、Stripe 的订单 10% 使用 Primer 3DS,90% 使用 Processor 3DS,3、Airwallex 支付失败的订单 Fallback 到 Adyen",
+Card,2025/07/29,"1、修改USD 订单分配：Adyen 60%,Stripe 30%,AWX 10%
+2、 Diners卡组都给Airwallex",
+Card,2025/07/31,"Stripe 的订单 50% 使用 Primer 3DS,50% 使用 Processor 3DS",
+Card,2025/08/01,issuer country code 为 TW  + Adyen + 非 Amex 开启 50% Adaptive 3DS,
+Card,2025/08/08,"Amex 修改：
+USD币种：Adyen:AWX - 50%:50%
+JPY/KRW ：AWX 100%
+其他： Stripe:AWX - 50%:50%",
+Card,2025/08/12,"Amex 修改：
+1、USD币种：Adyen:AWX - 50%:50%
+2、JPY/KRW ：AWX 100%
+3、其他： Stripe: 100%
+Adyen Affinity 订单分量：
+1. KRW/JPY > AWX:Adyen = 50%:50%
+2. TWD > AWX:Adyen:Stripe=25%:25%:50%",
+Card,2025/08/21,"1. 将PSP-Stripe的3DS全量切换至Primer 3DS,2. Card 支付的分量策略调整为下列方案：
+1. USD/EUR/SAR/AUD- Adyen:Stripe:AWX=10%:60%:30%,2. KRW/JPY/CAD- Adyen:Stripe:AWX=10%:30%:60%,3. 其他币种- Adyen:Stripe:AWX=20%:40%:40%,3. Fallback 配置
+1. Adyen 的 Fallback 配置成 Stripe
+2. Stripe 的 Fallback 配置成 Adyen
+3. Airwallex 的 Fallback 配置成",
+Card,2025/08/31,"USD- Adyen:Stripe:AWX=15%:70%:15%,KRW/JPY- Adyen:Stripe:AWX=10%:20%:70%,CAD/TWD/TRY- Adyen:Stripe:AWX=10%:60%:30%",
+Card,2025/09/09,"分量排序皆为Adyen:Stripe:AWX
+TRY - 15%:70%:15%,KRW/JPY/SGD - 20%:10%:70%",
+Card,2025/09/12,"Adyen USD币种Affinity交易分流
+CARD- 20%/40%/40% (Adyen/Stripe/AWX)",
+Card,2025/09/16,"分量排序皆为Adyen:Stripe:AWX
+USD/TWD/TRY/EUR/SAR- 20%:40%:40%",
+Card,2025/09/19,"分量排序皆为Adyen:Stripe:AWX
+USD- 20%:30%:50%,TRY- 60%:20%:20%,Adyen Affinity 交易分流：
+USD-  30%:30%:40%
+TWD- 40%:30%:30%",
+Card,2025/09/23,关闭 Adyen Affinity 交易分流,
+Card,2025/10/22,"分量排序皆为Adyen:Stripe:AWX
+TWD - 20%：40%：40%
+CAD - 40%：20%：40%
+AUD - 30%：40%：30%
+IDR - 20%：60%：20%",
+Card,2025/10/29,"分量排序皆为Adyen:Stripe:AWX
+SAR - 40%：30%：30%",
+Card,2025/11/04,"*从左至右为Adyen:Stripe:AWX
+CARD
+TWD - 30%：30%：40%
+EUR - 40%：30%：30%",
+Card,2025/11/11,"USD - 20%：40%：40%
+KRW/EUR/AED - 40%：20%：40%
+JPY - 20%：20%：60%
+GBP - 40%：30%：30%
+NZD - 20%：60%：20%
+其他币种（包括 AUD/THB）- 30%：30%：40%",
+Google Pay,2025/07/17,"Stripe (10%),Airwallex (10%),Adyen (80%)",
+Google Pay,2025/07/18,"JPY  KRW Adyen(50%),Airwallex (50%)
+TWD CAD EUR SAR SGD GBP AUD HKD AED Stripe(33%)  Airwallex(33%)  Airwallex (34%)",
+Google Pay,2025/07/23,"USD 给 Airwallex 10%
+现状是 Airwallex 10%,Adyen 90%",
+Google Pay,2025/07/25,"1、TWD PHP IDR CAD EUR AUD SAR 新增量切换成 Adyen 20%,Stripe 80%,2、Stripe 的订单 10% 使用 Primer 3DS,90% 使用 Processor 3DS,3、Airwallex 支付失败的订单 Fallback 到 Adyen",
+Google Pay,2025/07/29,"修改USD 订单分配 Adyen 60%,Stripe 20%,AWX 20%",
+Google Pay,2025/07/31,"Stripe 的订单 50% 使用 Primer 3DS,50% 使用 Processor 3DS",
+Google Pay,2025/08/01,issuer country code 为 US/CA/MX/AU/TW  + Adyen + 非 Amex  的 GPay 开启 50% Adaptive 3DS,
+Google Pay,2025/08/08,"Amex 修改：
+USD币种：Adyen:AWX - 50%:50%
+JPY/KRW ：AWX 100%
+其他： Stripe:AWX - 50%:50%",
+Google Pay,2025/08/12,"Amex 修改（Not Network Tokenised）：
+USD币种：Adyen:AWX - 50%:50%
+JPY/KRW ：AWX 100%
+其他： Stripe: 100%",
+Google Pay,2025/08/21,"1. 开启GP/AP的Affinity功能,2. 将PSP-Stripe的3DS全量切换至Primer 3DS,3. 苹果Pay的分量策略调整为下列方案：
+1. USD/EUR/SAR/AUD- Adyen:Stripe:AWX=10%:60%:30%,2. KRW/JPY/CAD- Adyen:Stripe:AWX=10%:30%:60%,3. 其他币种- Adyen:Stripe:AWX=20%:40%:40%,4. Fallback 配置
+1. Adyen 的 Fallback 配置成 Stripe
+2. Stripe 的 Fallback 配置成 Adyen
+3. Airwallex 的 Fallback 配置成",
+Google Pay,2025/08/31,"Google：
+TWD/TRY/PHP/GBP/AUD/SAR-Adyen:Stripe:AWX=10%:60%:30%
+USD/KRW/JPY- Adyen:Stripe:AWX=20%:20%:60%
+其他币种-Adyen:Stripe:AWX=20%:40%:40%",
+Google Pay,2025/09/09,"分量排序皆为Adyen:Stripe:AWX
+【GP】
+USD - 15%:70%:15%。",
+Google Pay,2025/09/12,"Adyen USD币种Affinity用户分流
+AP- 30%/50%/20%(Adyen/Stripe/AWX)
+GP- 20%/60%/20%(Adyen/Stripe/AWX)",
+Google Pay,2025/09/16,"【GP】
+USD - 20%:40%:40%。",
+Google Pay,2025/09/19,"分量排序皆为Adyen:Stripe:AWX
+【GP】
+USD - 20%:30%:50%
+Adyen Affinity 交易分流：
+【GP】
+USD- 40%/30%/30%",
+Google Pay,2025/09/23,关闭 Adyen Affinity 交易分流,
+Google Pay,2025/10/22,"分量排序皆为Adyen:Stripe:AWX
+【GP】
+EUR - 60%：20%：20%
+GBP - 20%：60%：20%",
+Google Pay,2025/10/29,"分量排序皆为Adyen:Stripe:AWX
+【GP】
+EUR - 40%：30%：30%
+JPY/SGD - 40%：20%：40%",
+Google Pay,2025/11/04,"*从左至右为Adyen:Stripe:AWX
+【GP】
+CAD - 30%：40%：30%
+JPY/SGD - 20%：20%：60%
+PHP - 40%：40%：20%
+其他币种 - 30%：40%：30%",
+Google Pay,2025/11/11,"USD/JPY - 20%：40%：40%
+TWD - 30%：40%：30%
+EUR - 40%：40%：20%
+CAD - 40%：30%：30%
+PHP - 20%：60%：20%",
+Card,2025/11/20,- TRY - 40%：30%：30%,
+Apple Pay,2025/11/20,- MYR - 40%：20%：40%,
+Google Pay,2025/11/20,"- EUR - 40%：30%：30%
+- SGD - 20%：40%：40%",
+Card,2025/12/02,"- AUD/GBP/INR/SAR/NZD - 30%：40%：30%
+- CAD - 20%：20%：60%
+- THB - 60%：20%：20%
+- UAH - 20%：40%：40%",
+Apple Pay,2025/12/02,"- SAR/GBP - 30%：40%：30%
+- CAD - 40%：40%：20%
+- KRW/BRL - 20%：20%：60%",
+Google Pay,2025/12/02,"- TWD/PHP - 20%：40%：40%
+- GBP - 30%：40%：30%",
