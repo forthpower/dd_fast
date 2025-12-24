@@ -80,7 +80,7 @@ def screenshot_and_crop():
     for idx, url in enumerate(urls, 1):
         print(f"[{idx}/{len(urls)}] {url}")
         driver.get(url)
-        time.sleep(20)
+        time.sleep(60)
         
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         url_part = url.split("/")[-2] if "/" in url else "tradingview"

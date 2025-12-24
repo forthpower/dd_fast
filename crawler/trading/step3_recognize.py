@@ -1,12 +1,11 @@
-import os
 import base64
-import re
-from openai import OpenAI
+import requests
+import csv
+from pathlib import Path
+from datetime import datetime
 
-QWEN_API_KEY = "sk-1a258df43a714d8eaf0f79dbfaa47308"
-QWEN_BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
-
-client = OpenAI(api_key=QWEN_API_KEY, base_url=QWEN_BASE_URL)
+GEMINI_API_KEY = "AIzaSyC9qr72bGb3kGGzG88Yo4UjT5nUUtWpckU"
+GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent"
 PROMPT = (
     "请识别图片右下角的月份表格（包含 Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec 等月份列），"
     "并严格遵守以下规则："
@@ -21,67 +20,72 @@ def recognize_image(path: str, prompt: str | None = None) -> str | None:
     try:
         with open(path, "rb") as f:
             image_base64 = base64.b64encode(f.read()).decode("utf-8")
-        completion = client.chat.completions.create(
-            model="qwen-vl-plus",
-            messages=[{
-                "role": "user",
-                "content": [
-                    {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{image_base64}"}},
-                    {"type": "text", "text": prompt or PROMPT},
-                ],
+        
+        mime_type = "image/png" if path.lower().endswith(".png") else "image/jpeg"
+        payload = {
+            "contents": [{
+                "parts": [
+                    {"text": prompt or PROMPT},
+                    {"inline_data": {"mime_type": mime_type, "data": image_base64}}
+                ]
             }],
-            temperature=0.1,
-            max_tokens=2000,
+            "generationConfig": {
+                "temperature": 0.1,
+                "maxOutputTokens": 500,
+            }
+        }
+        
+        response = requests.post(
+            f"{GEMINI_API_URL}?key={GEMINI_API_KEY}",
+            json=payload,
+            headers={"Content-Type": "application/json"}
         )
-        if completion.choices:
-            return completion.choices[0].message.content.strip()
+        
+        if response.status_code == 200:
+            result = response.json()
+            if "candidates" in result and result["candidates"]:
+                content = result["candidates"][0].get("content", {})
+                parts = content.get("parts", [])
+                if parts and "text" in parts[0]:
+                    return parts[0]["text"].strip()
     except Exception:
-        return None
+        pass
     return None
 
 
-def recognize_image_with_prompt(path: str, custom_prompt: str) -> str | None:
-    return recognize_image(path, prompt=custom_prompt)
+def main():
+    import sys
+    
+    script_dir = Path(__file__).parent
+    result_dir = script_dir / "result" / "screenshots"
+    
+    if len(sys.argv) > 1:
+        input_path = Path(sys.argv[1])
+        image_files = [input_path] if input_path.is_file() else list(input_path.glob("*.png")) if input_path.is_dir() else []
+    else:
+        image_files = list(result_dir.glob("*.png")) if result_dir.exists() else []
+    
+    if not image_files:
+        print("错误: 未找到图片文件")
+        return
+    
+    print(f"找到 {len(image_files)} 个图片，开始识别...")
+    
+    results = []
+    for i, img_path in enumerate(image_files, 1):
+        print(f"[{i}/{len(image_files)}] {img_path.name}")
+        result = recognize_image(str(img_path))
+        results.append([img_path.name, result or "识别失败"])
+    
+    # 保存到 CSV
+    csv_path = script_dir / f"recognition_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+    with open(csv_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(["图片文件名", "识别结果"])
+        writer.writerows(results)
+    
+    print(f"\n完成! 结果已保存到: {csv_path}")
+    print(f"成功: {sum(1 for r in results if r[1] != '识别失败')} 个")
 
-
-def parse_csv(text: str):
-    lines = []
-    for line in text.split("\n"):
-        line = line.strip()
-        if line and ("," in line or "\t" in line):
-            row = [c.strip() for c in (line.split(",") if "," in line else line.split("\t"))]
-            if any(row):
-                lines.append(row)
-    return lines if lines else [[text]]
-
-
-def extract_nov_last_number(text: str) -> str | None:
-    """从识别结果中提取 Nov 列的最后一个数字"""
-    text = text.strip()
-    # 如果直接返回了数字
-    if text and text.replace(".", "").replace("-", "").isdigit():
-        return text
-    # 尝试从 CSV 格式中提取
-    lines = parse_csv(text)
-    if not lines:
-        return None
-    # 查找 Nov 列的索引
-    header_row = None
-    nov_col_idx = None
-    for i, row in enumerate(lines):
-        for j, cell in enumerate(row):
-            if "nov" in str(cell).lower():
-                nov_col_idx = j
-                header_row = i
-                break
-        if nov_col_idx is not None:
-            break
-    if nov_col_idx is None:
-        return None
-    # 从 Nov 列提取最后一个非空数字
-    for row in reversed(lines[header_row + 1:]):
-        if nov_col_idx < len(row):
-            val = str(row[nov_col_idx]).strip()
-            if val and val.replace(".", "").replace("-", "").isdigit():
-                return val
-    return None
+if __name__ == "__main__":
+    main()
