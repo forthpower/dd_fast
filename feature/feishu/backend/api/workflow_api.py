@@ -32,7 +32,7 @@ FEISHU_TABLE_URL = "https://centurygames.feishu.cn/base/ZjWjbTdQQaX22VsaMQzcGSLb
 UPDATE_LOG_TABLE_URL = "https://centurygames.feishu.cn/base/ZjWjbTdQQaX22VsaMQzcGSLbnyc?table=tbl4vNZC0TvupOj9&view=vew4y8PbUr"
 FEISHU_APP_ID = "cli_a99e862024e7100e"
 FEISHU_APP_SECRET = "Yog0pVLeTiyjsfxtga7ltbxgd3uVbg0j"
-CURRENCY_MAINTENANCE_DIR = str(current_dir / "currency maintenance")
+CURRENCY_MAINTENANCE_DIR = str(current_dir / "currency_maintenance")
 UPDATE_LOG_DIR = str(current_dir / "update log")
 
 
@@ -96,7 +96,7 @@ def load_should_keep_data() -> dict:
     }
     
     current_dir = Path(__file__).parent.parent.parent
-    changelog_dir = current_dir / "currency maintenance"
+    changelog_dir = current_dir / "currency_maintenance"
     csv_files = list(changelog_dir.glob("*.csv"))
     
     if csv_files:
@@ -473,7 +473,7 @@ def write_csv_config(config: dict, csv_path: str):
     # 读取旧数据，只保留不符合删除条件的数据
     old_rows = []
     current_dir = Path(__file__).parent.parent.parent
-    changelog_dir = current_dir / "currency maintenance"
+    changelog_dir = current_dir / "currency_maintenance"
     csv_files = list(changelog_dir.glob("*.csv"))
     
     if csv_files:
@@ -593,7 +593,7 @@ def get_latest_changelog_csv() -> Path:
         CSV文件的Path对象
     """
     current_dir = Path(__file__).parent.parent.parent
-    changelog_dir = current_dir / "currency maintenance"
+    changelog_dir = current_dir / "currency_maintenance"
     
     if not changelog_dir.exists():
         changelog_dir.mkdir(parents=True, exist_ok=True)
@@ -1497,12 +1497,12 @@ def save_new_config_to_changelog(new_config: dict) -> str:
     from datetime import datetime
     
     current_dir = Path(__file__).parent.parent.parent
-    changelog_dir = current_dir / "currency maintenance"
+    changelog_dir = current_dir / "currency_maintenance"
     changelog_dir.mkdir(parents=True, exist_ok=True)
     
     # 使用时间戳文件名，不覆盖旧文件
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    csv_path = changelog_dir / f"currency maintenance_{timestamp}.csv"
+    csv_path = changelog_dir / f"currency_maintenance_{timestamp}.csv"
     
     # 保存CSV文件（会保留原有文件的其他列信息）
     write_csv_config(new_config, str(csv_path))

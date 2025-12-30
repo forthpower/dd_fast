@@ -18,7 +18,7 @@ tar --exclude='.git' \
     -czf dd_fast.tar.gz .
 
 # 上传到服务器
-scp dd_fast.tar.gz root@42.121.252.52:/tmp/
+scp dd_fast.tar.gz root@42.121.252.52:/root/
 ```
 
 ### 步骤2: SSH登录服务器并部署
@@ -28,11 +28,11 @@ scp dd_fast.tar.gz root@42.121.252.52:/tmp/
 ssh root@your-server-ip
 
 # 解压项目
-cd /tmp
-tar -xzf dd_fast.tar.gz -C /tmp/dd_fast
+cd /root
+tar -xzf dd_fast.tar.gz -C /root/dd_fast
 
 # 运行部署脚本
-cd /tmp/dd_fast
+cd /root/dd_fast
 chmod +x deploy/deploy.sh
 ./deploy/deploy.sh
 ```
@@ -114,14 +114,14 @@ netstat -tulpn | grep 5012
 
 ```bash
 # 1. 上传新代码
-scp -r . root@your-server-ip:/tmp/dd_fast
+scp -r . root@your-server-ip:/root/dd_fast
 
 # 2. 停止服务
 systemctl stop dd_fast
 
 # 3. 更新文件
 cd /opt/dd_fast
-rsync -av --exclude='venv' --exclude='logs' /tmp/dd_fast/ .
+rsync -av --exclude='venv' --exclude='logs' /root/dd_fast/ .
 
 # 4. 更新依赖（如果需要）
 source venv/bin/activate

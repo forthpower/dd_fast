@@ -39,6 +39,24 @@ fi
 PYTHON_VERSION=$(python3 --version)
 echo -e "${GREEN}✓ 找到Python: ${PYTHON_VERSION}${NC}"
 
+# 检查venv模块是否可用
+echo "检查venv模块..."
+if ! python3 -m venv --help &> /dev/null; then
+    echo -e "${YELLOW}警告: venv模块不可用，尝试安装...${NC}"
+    # 尝试安装python3-venv
+    if command -v apt-get &> /dev/null; then
+        apt-get update && apt-get install -y python3-venv
+    elif command -v yum &> /dev/null; then
+        yum install -y python3-venv
+    else
+        echo -e "${RED}错误: 无法自动安装venv模块，请手动安装${NC}"
+        echo "Ubuntu/Debian: apt-get install -y python3-venv"
+        echo "CentOS/RHEL: yum install -y python3-venv"
+        exit 1
+    fi
+fi
+echo -e "${GREEN}✓ venv模块可用${NC}"
+
 # 2. 创建安装目录
 echo -e "${YELLOW}[2/7] 创建安装目录...${NC}"
 mkdir -p ${INSTALL_DIR}
@@ -63,17 +81,38 @@ echo -e "${GREEN}✓ 文件复制完成${NC}"
 
 # 4. 创建Python虚拟环境
 echo -e "${YELLOW}[4/7] 创建Python虚拟环境...${NC}"
-cd ${INSTALL_DIR}
+cd ${INSTALL_DIR} || exit 1
 if [ -d "venv" ]; then
     echo "虚拟环境已存在，跳过创建"
 else
+    echo "正在创建虚拟环境..."
     python3 -m venv venv
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}错误: 虚拟环境创建失败${NC}"
+        exit 1
+    fi
     echo -e "${GREEN}✓ 虚拟环境创建完成${NC}"
+fi
+
+# 检查虚拟环境是否存在
+if [ ! -f "venv/bin/activate" ]; then
+    echo -e "${RED}错误: 虚拟环境激活脚本不存在${NC}"
+    echo "尝试重新创建虚拟环境..."
+    rm -rf venv
+    python3 -m venv venv
+    if [ $? -ne 0 ] || [ ! -f "venv/bin/activate" ]; then
+        echo -e "${RED}错误: 无法创建虚拟环境，请检查Python3和venv模块${NC}"
+        exit 1
+    fi
 fi
 
 # 5. 安装依赖
 echo -e "${YELLOW}[5/7] 安装Python依赖...${NC}"
 source venv/bin/activate
+if [ $? -ne 0 ]; then
+    echo -e "${RED}错误: 无法激活虚拟环境${NC}"
+    exit 1
+fi
 pip install --upgrade pip
 # 使用Linux专用的requirements文件（不包含rumps）
 if [ -f "requirements-linux.txt" ]; then

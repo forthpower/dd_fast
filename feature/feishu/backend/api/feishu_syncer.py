@@ -300,7 +300,7 @@ def sync_currency_maintenance_to_feishu(
 
 if __name__ == "__main__":
     table_url = "https://centurygames.feishu.cn/base/ZjWjbTdQQaX22VsaMQzcGSLbnyc?table=tblKHfdMJyrVonxS&view=vew9fRbXDD"
-    csv_dir = os.path.join(os.path.dirname(__file__), "../../../workflow/currency maintenance")
+    csv_dir = os.path.join(os.path.dirname(__file__), "../../../workflow/currency_maintenance")
     
     app_id = "cli_a99e862024e7100e"
     app_secret = "Yog0pVLeTiyjsfxtga7ltbxgd3uVbg0j"
