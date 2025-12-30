@@ -114,13 +114,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 pip install --upgrade pip
-# 使用Linux专用的requirements文件（不包含rumps）
-if [ -f "requirements-linux.txt" ]; then
-    pip install -r requirements-linux.txt
-else
-    # 如果没有requirements-linux.txt，手动安装（不包含rumps）
-    pip install flask==2.3.3 flask-cors==4.0.0 pymysql==1.1.0 requests pandas openpyxl Pillow openai chuidi_zipcode python-docx
-fi
+pip install -r requirements.txt
 echo -e "${GREEN}✓ 依赖安装完成${NC}"
 deactivate
 

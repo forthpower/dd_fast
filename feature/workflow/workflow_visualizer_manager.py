@@ -41,20 +41,16 @@ class WorkflowVisualizerManager:
     def open_feature(self):
         """打开Workflow可视化功能"""
         try:
-            import rumps
-            
             # 检查必要文件是否存在
             if not self._check_files():
                 error_msg = "Workflow可视化文件不完整，请检查文件是否存在"
                 print(f"错误: {error_msg}")
-                rumps.alert("错误", error_msg)
                 return
             
             # 检查依赖是否安装
             if not self._check_dependencies():
                 error_msg = "缺少必要的Python依赖，请先安装requirements.txt中的依赖"
                 print(f"错误: {error_msg}")
-                rumps.alert("错误", error_msg)
                 return
             
             # 检查服务器是否已经在运行（主应用可能已经启动了）
@@ -76,11 +72,6 @@ class WorkflowVisualizerManager:
             error_msg = f"启动Workflow可视化时出错: {str(e)}"
             print(error_msg)
             traceback.print_exc()
-            try:
-                import rumps
-                rumps.alert("错误", error_msg)
-            except:
-                pass
     
     def _check_files(self):
         """检查必要文件是否存在"""
@@ -234,11 +225,7 @@ class WorkflowVisualizerManager:
             import traceback
             traceback.print_exc()
             print(f"打开浏览器失败: {e}")
-            try:
-                import rumps
-                rumps.alert("错误", f"打开浏览器失败: {str(e)}\n\n请手动访问: http://localhost:{self.port}")
-            except:
-                pass
+            print(f"打开浏览器失败: {str(e)}\n\n请手动访问: http://localhost:{self.port}")
     
     def cleanup(self):
         """清理资源"""

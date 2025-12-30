@@ -1,16 +1,22 @@
 # dd_fast 多功能工具集
 
-一个基于系统托盘的多功能工具集，包含文件复制器、Workflow编辑器、Schema生成器、命令大全、数据脚本生成器、Workflow可视化工具等功能。
+一个基于Flask的API服务器，提供Workflow可视化、飞书Webhook、数据脚本生成等功能。
 
 ## 快速启动
+
+```bash
+python3 server.py
+```
+
+或者：
 
 ```bash
 python3 app.py
 ```
 
-运行后会在系统托盘中显示图标，右键点击可看到功能菜单。
+服务器将在后台运行，提供API和Webhook功能。
 
-> **注意**：首次运行需要安装依赖 `pip3 install rumps flask flask-cors python-docx`
+> **注意**：首次运行需要安装依赖 `pip3 install -r requirements.txt`
 
 ## 打包为 macOS 应用 (.app)
 
@@ -290,10 +296,9 @@ tail -f ~/Library/Logs/dd_fast/app.stderr.log
 ## 依赖安装
 
 ```bash
-pip3 install rumps flask flask-cors python-docx
+pip3 install -r requirements.txt
 ```
 
-- **rumps** - 系统托盘库
 - **flask** - Web框架
 - **flask-cors** - 跨域支持
 - **python-docx** - DOCX文件读取（用于分量对比功能）
@@ -304,7 +309,7 @@ pip3 install rumps flask flask-cors python-docx
 
 1. **检查依赖**：
    ```bash
-   pip3 install rumps flask flask-cors python-docx
+   pip3 install -r requirements.txt
    ```
 
 2. **检查Python版本**：

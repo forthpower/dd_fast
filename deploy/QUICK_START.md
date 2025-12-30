@@ -125,7 +125,7 @@ rsync -av --exclude='venv' --exclude='logs' /root/dd_fast/ .
 
 # 4. 更新依赖（如果需要）
 source venv/bin/activate
-pip install -r requirements-linux.txt
+pip install -r requirements.txt
 deactivate
 
 # 5. 重启服务

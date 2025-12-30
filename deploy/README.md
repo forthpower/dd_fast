@@ -80,7 +80,6 @@ pip install flask==2.3.3 flask-cors==4.0.0 pymysql==1.1.0 requests pandas openpy
 deactivate
 ```
 
-**注意**: `rumps`是macOS特定的库，在Linux上不需要安装。
 
 #### 5. 创建必要的目录
 ```bash
@@ -209,7 +208,6 @@ pip install --upgrade pip setuptools wheel
 pip install -r requirements.txt
 ```
 
-注意：`rumps`是macOS特定的，在Linux上会安装失败，这是正常的。
 
 ## 更新部署
 

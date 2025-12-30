@@ -7,7 +7,7 @@ Type=simple
 User=root
 WorkingDirectory=/opt/dd_fast
 Environment="PATH=/usr/bin:/usr/local/bin:/opt/dd_fast/venv/bin"
-ExecStart=/opt/dd_fast/venv/bin/python3 /opt/dd_fast/server.py --host 0.0.0.0 --port 5012
+ExecStart=/opt/dd_fast/venv/bin/python3 /opt/dd_fast/app.py
 Restart=always
 RestartSec=10
 StandardOutput=journal
